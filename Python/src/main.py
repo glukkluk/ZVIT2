@@ -1,25 +1,31 @@
 import flet as ft
 
+from views import HomeView, LoginView
+
 
 def main(page: ft.Page):
-    counter = ft.Text("0", size=50, data=0)
+    page.title = "Розумний розклад"
 
-    def increment_click(e):
-        counter.data += 1
-        counter.value = str(counter.data)
+    def route_change():
+        page.views.clear()
+        page.views.append(HomeView("/"))
 
-    page.floating_action_button = ft.FloatingActionButton(
-        icon=ft.Icons.ADD, on_click=increment_click
-    )
-    page.add(
-        ft.SafeArea(
-            expand=True,
-            content=ft.Container(
-                content=counter,
-                alignment=ft.Alignment.CENTER,
-            ),
-        )
-    )
+        if page.route == "/login":
+            page.views.append(LoginView("/setting"))
+
+        page.update()
+
+    async def view_pop(e: ft.ViewPopEvent):
+        if e.view is not None:
+            print("View pop:", e.view)
+            page.views.remove(e.view)
+            top_view = page.views[-1]
+            await page.push_route(top_view.route)
+
+    page.on_route_change = route_change
+    page.on_view_pop = view_pop
+
+    route_change()
 
 
-ft.run(main)
+ft.run(main, view=ft.AppView.WEB_BROWSER)
