@@ -8,6 +8,7 @@ authors = [
     { name = "Flet developer", email = "you@example.com" }
 ]
 dependencies = [
+    "email-validator>=2.3.0",
     "flet[all]>=0.84.0",
     "pydantic>=2.13.3",
     "pydantic-settings>=2.14.0",
