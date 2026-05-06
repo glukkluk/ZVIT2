@@ -4,15 +4,12 @@ from typing import Any
 
 
 class UniversalRouter:
-    def __init__(
-        self, page_instance: Page, destination: str, data: dict[str, Any]
-    ) -> None:
+    def __init__(self, page_instance: Page) -> None:
         self.page_instance = page_instance
-        self.destination = destination
-        self.data = data
 
-    async def go(self, **kwargs) -> None:
-        for k, v in self.data.items():
-            self.page_instance.data[k] = v
+    async def go(self, destination: str, data: dict[str, Any] = None, **kwargs) -> None:
+        if data:
+            for k, v in data.items():
+                self.page_instance.data[k] = v
 
-        await self.page_instance.push_route(route=self.destination, **kwargs)
+        await self.page_instance.push_route(route=destination, **kwargs)
