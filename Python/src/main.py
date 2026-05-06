@@ -1,11 +1,15 @@
 import flet as ft
 
 from components import AlreadyAuthNotification, NotAuthNotification
+from db import init_database
+
 from views import HomeView, LoginView, RegisterView
 
 
 async def main(page: ft.Page):
     page.title = "Розумний розклад"
+
+    init_database()
 
     page.session.store.set(key="first_entry", value=True)
 
