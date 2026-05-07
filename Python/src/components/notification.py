@@ -14,3 +14,10 @@ class AlreadyAuthNotification(Notification):
 
 class NotAuthNotification(Notification):
     description = "Щоб продовжити, необхідно увійти в акаунт!"
+
+
+class AccountAlreadyExists(Notification):
+    def __init__(self, email: str):
+        self.description = f"Користувач із e-mail {email} вже існує"
+
+        super().__init__()
