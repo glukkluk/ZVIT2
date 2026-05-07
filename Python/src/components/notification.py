@@ -16,6 +16,10 @@ class NotAuthNotification(Notification):
     description = "Щоб продовжити, необхідно увійти в акаунт!"
 
 
+class AuthenticationFailed(Notification):
+    description = "Некоректний e-mail або пароль"
+
+
 class AccountAlreadyExists(Notification):
     def __init__(self, email: str):
         self.description = f"Користувач із e-mail {email} вже існує"
