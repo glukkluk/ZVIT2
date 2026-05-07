@@ -1,10 +1,16 @@
 import flet as ft
 
+from crud import read_user_by_email, create_user
+from core.security import get_password_hash
+from db import Session
+from components import AccountAlreadyExists
 from logic import check_email, check_password
 
 
 class RegisterView(ft.View):
     def __init__(self, path: str):
+        self.db_session = Session
+
         self.email_field = ft.TextField(label="E-mail")
         self.password_field = ft.TextField(label="Пароль", password=True)
         self.repeat_password_field = ft.TextField(
@@ -31,7 +37,7 @@ class RegisterView(ft.View):
             ],
         )
 
-    def register(self):
+    async def register(self):
         has_error = False
 
         email = self.email_field.value.strip()
@@ -55,7 +61,17 @@ class RegisterView(ft.View):
         if has_error:
             return
 
-        # ... Write to DB
+        if read_user_by_email(db=self.db_session(), email=email):
+            self.page.show_dialog(dialog=AccountAlreadyExists(email=email))
+            return
+
+        create_user(
+            db=self.db_session(),
+            email=email,
+            password_hash=get_password_hash(password=password),
+        )
+
+        await self.go_to_login()
 
     async def go_to_login(self):
         await self.page.push_route("/login")
