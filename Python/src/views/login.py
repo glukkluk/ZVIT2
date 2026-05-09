@@ -29,14 +29,6 @@ class LoginView(ft.View):
                         )
                     ]
                 ),
-                ft.Text(
-                    spans=[
-                        ft.TextSpan(
-                            text="Не пам'ятаю пароль",
-                            on_click=self.go_to_reset_password,
-                        )
-                    ]
-                ),
             ],
         )
 
@@ -88,6 +80,3 @@ class LoginView(ft.View):
 
     async def go_to_register(self):
         await self.page.push_route("/register")
-
-    async def go_to_reset_password(self):
-        await self.page.push_route("/reset-password")
