@@ -8,6 +8,7 @@ from views import HomeView, LoginView, RegisterView
 
 async def main(page: ft.Page):
     page.title = "Розумний розклад"
+    page.theme_mode = ft.ThemeMode.LIGHT
 
     init_database()
 
