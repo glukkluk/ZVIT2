@@ -20,31 +20,30 @@ async def main(page: ft.Page):
         is_authorized = page.session.store.get(key="authorized")
         first_entry = page.session.store.get(key="first_entry")
 
-        match page.route:
-            case "/":
-                if is_authorized:
+        if is_authorized:
+            match page.route:
+                case "/":
                     page.views.append(HomeView("/"))
-                else:
+
+                case "/login" | "/register":
+                    await page.push_route("/")
+                    page.show_dialog(dialog=AlreadyAuthNotification())
+
+        else:
+            match page.route:
+                case "/login":
+                    page.views.append(LoginView("/login"))
+
+                case "/register":
+                    page.views.append(RegisterView("/register"))
+
+                case _:
                     await page.push_route("/login")
 
                     if not first_entry:
                         page.show_dialog(dialog=NotAuthNotification())
 
                     page.session.store.set(key="first_entry", value=False)
-
-            case "/login":
-                if is_authorized:
-                    await page.push_route("/")
-                    page.show_dialog(dialog=AlreadyAuthNotification())
-                else:
-                    page.views.append(LoginView("/login"))
-
-            case "/register":
-                if is_authorized:
-                    await page.push_route("/")
-                    page.show_dialog(dialog=AlreadyAuthNotification())
-                else:
-                    page.views.append(RegisterView("/register"))
 
         page.update()
 
