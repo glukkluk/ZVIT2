@@ -4,8 +4,8 @@ from components import BaseView
 
 
 class HomeView(BaseView):
-    def __init__(self, path: str):
-        super().__init__(route=path, body=[ft.Text("Homepage")])
+    def __init__(self):
+        super().__init__(route="/", body=[ft.Text("Homepage")], index=0)
 
         self.floating_action_button = ft.FloatingActionButton(
             content="Створити", icon=ft.Icons.ADD, on_click=self.go_to_new_page

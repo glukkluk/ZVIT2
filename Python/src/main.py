@@ -3,7 +3,15 @@ import flet as ft
 from components import AlreadyAuthNotification, NotAuthNotification
 from db import init_database
 
-from views import HomeView, LoginView, RegisterView
+from views import (
+    HomeView,
+    LoginView,
+    RegisterView,
+    ProfileView,
+    CalendarView,
+    NotificationsView,
+    ReminderView,
+)
 
 
 async def main(page: ft.Page):
@@ -23,11 +31,23 @@ async def main(page: ft.Page):
         if is_authorized:
             match page.route:
                 case "/":
-                    page.views.append(HomeView("/"))
+                    page.views.append(HomeView())
 
                 case "/login" | "/register":
                     await page.push_route("/")
                     page.show_dialog(dialog=AlreadyAuthNotification())
+
+                case "/profile":
+                    page.views.append(ProfileView())
+
+                case "/calendar":
+                    page.views.append(CalendarView())
+
+                case "/notifications":
+                    page.views.append(NotificationsView())
+
+                case "/reminder":
+                    page.views.append(ReminderView())
 
         else:
             match page.route:

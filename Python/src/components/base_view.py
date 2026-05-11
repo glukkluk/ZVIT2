@@ -5,7 +5,9 @@ from .rail import MainRail
 
 
 class BaseView(ft.View):
-    def __init__(self, route: str, body: list[ft.BaseControl], **kwargs):
+    def __init__(
+        self, route: str, body: list[ft.BaseControl], index: int | None = None, **kwargs
+    ):
         super().__init__(
             route=route,
             appbar=MainAppBar(),
@@ -15,7 +17,7 @@ class BaseView(ft.View):
                     content=ft.Row(
                         expand=True,
                         controls=[
-                            ft.SelectionArea(content=MainRail()),
+                            ft.SelectionArea(content=MainRail(index=index)),
                             ft.VerticalDivider(width=1),
                             ft.Column(
                                 alignment=ft.MainAxisAlignment.START,

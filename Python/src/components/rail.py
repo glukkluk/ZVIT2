@@ -2,11 +2,11 @@ import flet as ft
 
 
 class MainRail(ft.NavigationRail):
-    def __init__(self):
-        self.current_selected_index = 0
+    def __init__(self, index: int):
+        self.current_selected_index = index
 
         super().__init__(
-            selected_index=0,
+            selected_index=index,
             extended=True,
             on_change=self.go_to_page,
             destinations=[
