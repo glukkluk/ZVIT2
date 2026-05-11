@@ -76,6 +76,9 @@ class LoginView(ft.View):
         )
 
         self.page.session.store.set(key="authorized", value=True)
+        self.page.session.store.set(
+            key="user", value={"email": user.email, "password_hash": user.password_hash}
+        )
         await self.page.push_route("/")
 
     async def go_to_register(self):

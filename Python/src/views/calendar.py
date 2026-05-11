@@ -5,4 +5,4 @@ from components import BaseView
 
 class CalendarView(BaseView):
     def __init__(self):
-        super().__init__(route="/calendar", body=[ft.Text("Calendar")], index=1)
+        super().__init__(route="/calendar", body=[ft.Text("Calendar")])
