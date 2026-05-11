@@ -3,12 +3,12 @@ import flet as ft
 
 class MainRail(ft.NavigationRail):
     def __init__(self):
+        self.current_selected_index = 0
+
         super().__init__(
             selected_index=0,
             extended=True,
-            on_change=lambda e: print(
-                "Selected destination:", e.control.selected_index
-            ),
+            on_change=self.go_to_page,
             destinations=[
                 ft.NavigationRailDestination(
                     icon=ft.Icons.HOME_OUTLINED,
@@ -32,3 +32,19 @@ class MainRail(ft.NavigationRail):
                 ),
             ],
         )
+
+    async def go_to_page(self, e: ft.Event[ft.NavigationRail]):
+        if e.data == self.current_selected_index:
+            return
+
+        self.current_selected_index = e.data
+
+        match e.control.selected_index:
+            case 0:
+                await self.page.push_route("/")
+            case 1:
+                await self.page.push_route("/calendar")
+            case 2:
+                await self.page.push_route("/reminder")
+            case 3:
+                await self.page.push_route("/notifications")
