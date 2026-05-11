@@ -30,11 +30,11 @@ class MainAppBar(ft.AppBar):
         )
 
     def change_theme_mode(self, e: ft.Event[ft.IconButton]):
-        if self.page.theme_mode == "light":
-            self.page.theme_mode = "dark"
+        if self.page.theme_mode == ft.ThemeMode.LIGHT:
+            self.page.theme_mode = ft.ThemeMode.DARK
             e.control.icon = ft.Icons.LIGHT_MODE
         else:
-            self.page.theme_mode = "light"
+            self.page.theme_mode = ft.ThemeMode.LIGHT
             e.control.icon = ft.Icons.DARK_MODE
 
     async def open_account_actions(self):
