@@ -4,7 +4,6 @@ from core.security import check_and_rehash, verify_password
 from components import AuthenticationFailed
 from crud import read_user_by_email, update_user
 from db import Session
-from logic import check_email
 
 
 class LoginView(ft.View):
@@ -38,11 +37,11 @@ class LoginView(ft.View):
         email = self.email_field.value.strip()
         password = self.password_field.value.strip()
 
-        if check_email(email=email):
-            self.email_field.error = None
-        else:
-            self.email_field.error = "Некоректний e-mail"
+        if not email:
+            self.email_field.error = "Введіть e-mail"
             has_error = True
+        else:
+            self.email_field.error = None
 
         if not password:
             self.password_field.error = "Введіть пароль"
