@@ -8,6 +8,7 @@ from .notification import (
     AccountAlreadyExists,
 )
 from .appbar import MainAppBar
+from .alerts import NewCategoryAlert
 from .rail import MainRail
 
 __all__ = [
@@ -19,4 +20,5 @@ __all__ = [
     "AccountAlreadyExists",
     "MainAppBar",
     "MainRail",
+    "NewCategoryAlert",
 ]

@@ -7,6 +7,7 @@ from views import (
     HomeView,
     LoginView,
     RegisterView,
+    NewEventView,
     ProfileView,
     CalendarView,
     NotificationsView,
@@ -39,6 +40,9 @@ async def main(page: ft.Page):
 
                 case "/profile":
                     page.views.append(ProfileView())
+
+                case "/new":
+                    page.views.append(NewEventView())
 
                 case "/calendar":
                     page.views.append(CalendarView())

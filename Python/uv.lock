@@ -458,6 +458,18 @@ wheels = [
 ]
 
 [[package]]
+name = "flet-color-pickers"
+version = "0.84.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "flet" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7c/b1/756ed5d19cadbe92986674badb1fb151f176ab98810daf5b8665494955f8/flet_color_pickers-0.84.0.tar.gz", hash = "sha256:23dfc316ab82e38fc0c43b132285fbe40be879584a4200baa403ad5bb6fadf92", size = 12463, upload-time = "2026-04-01T19:24:27.869Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9e/38/3df0b670173398ab6ee66ff3aca6deea0c52add2e65ee656fa50d563635b/flet_color_pickers-0.84.0-py3-none-any.whl", hash = "sha256:96a4b9ebb7023dc84461697b916413636fe3453168dada80abe81abc661efbc8", size = 19323, upload-time = "2026-04-01T19:24:26.942Z" },
+]
+
+[[package]]
 name = "flet-desktop"
 version = "0.84.0"
 source = { registry = "https://pypi.org/simple" }
@@ -995,6 +1007,7 @@ dependencies = [
     { name = "cyrtranslit" },
     { name = "email-validator" },
     { name = "flet", extra = ["all"] },
+    { name = "flet-color-pickers" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "sqlalchemy" },
@@ -1013,6 +1026,7 @@ requires-dist = [
     { name = "cyrtranslit", specifier = ">=1.2.0" },
     { name = "email-validator", specifier = ">=2.3.0" },
     { name = "flet", extras = ["all"], specifier = ">=0.84.0" },
+    { name = "flet-color-pickers", specifier = ">=0.84.0" },
     { name = "pydantic", specifier = ">=2.13.3" },
     { name = "pydantic-settings", specifier = ">=2.14.0" },
     { name = "sqlalchemy", specifier = ">=2.0.49" },
