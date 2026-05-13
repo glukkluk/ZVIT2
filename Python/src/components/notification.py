@@ -25,3 +25,7 @@ class AccountAlreadyExists(Notification):
         self.description = f"Користувач із e-mail {email} вже існує"
 
         super().__init__()
+
+
+class SelectDateAndTime(Notification):
+    description = "Виберіть дату та час"

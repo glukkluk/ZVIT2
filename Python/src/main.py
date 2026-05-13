@@ -29,6 +29,10 @@ async def main(page: ft.Page):
         is_authorized = page.session.store.get(key="authorized")
         first_entry = page.session.store.get(key="first_entry")
 
+        # page.session.store.set(
+        #     "categories", [{"key": "robota", "name": "Робота", "color": "f2f2f2f2f2"}]
+        # )
+
         if is_authorized:
             match page.route:
                 case "/":
@@ -42,7 +46,7 @@ async def main(page: ft.Page):
                     page.views.append(ProfileView())
 
                 case "/new":
-                    page.views.append(NewEventView())
+                    page.views.append(NewEventView(data=page.session.store))
 
                 case "/calendar":
                     page.views.append(CalendarView())

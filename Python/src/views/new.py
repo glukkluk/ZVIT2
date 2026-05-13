@@ -2,11 +2,16 @@ from zoneinfo import ZoneInfo
 
 import flet as ft
 
-from components import BaseView, NewCategoryAlert
+from components import BaseView, NewCategoryAlert, SelectDateAndTime
 
 
 class NewEventView(BaseView):
-    def __init__(self):
+    def __init__(self, data: list[dict]):
+        self.date = None
+        self.time = None
+        self.category = "none"
+        self.reminder_time = "no"
+
         self.RAIL.selected_index = None
 
         self.event_name = ft.TextField(hint_text="Наприклад: зустріч із клієнтом")
@@ -33,15 +38,35 @@ class NewEventView(BaseView):
 
         self.location_input = ft.TextField(hint_text="Наприклад: міський парк")
 
-        self.default_option = ft.DropdownOption(
-            key="new_category",
-            text="",
-            content=ft.Text(value="Додати категорію"),
-            trailing_icon=ft.Icons.ADD,
-        )
+        self.default_options = [
+            ft.DropdownOption(
+                key="new_category",
+                text="Додати категорію",
+                trailing_icon=ft.Icons.ADD,
+            ),
+            ft.DropdownOption(
+                key="none", text="Без категорії", leading_icon=ft.Icons.BLOCK
+            ),
+        ]
+
+        if data.get("categories"):
+            self.category_dropdown.options = self.default_options
+            for category in data.get("categories"):
+                self.category_dropdown.options.append(
+                    ft.DropdownOption(
+                        key=category["key"],
+                        text=category["name"],
+                        leading_icon=ft.Icon(
+                            icon=ft.Icons.CIRCLE, color=category["color"]
+                        ),
+                    )
+                )
+        else:
+            dropdown_options = self.default_options
 
         self.category_dropdown = ft.Dropdown(
-            options=[self.default_option],
+            value="none",
+            options=dropdown_options,
             on_select=self.select_category,
         )
 
@@ -84,6 +109,7 @@ class NewEventView(BaseView):
                                 ft.DropdownOption(key="3d", text="За 3 дні"),
                             ],
                             menu_height=150,
+                            on_select=self.select_reminder_time,
                         ),
                     ]
                 ),
@@ -91,7 +117,7 @@ class NewEventView(BaseView):
                 self.event_description,
                 ft.Row(
                     controls=[
-                        ft.Button("Скасувати"),
+                        ft.Button("Скасувати", on_click=self.go_home),
                         ft.FilledButton("Зберегти", on_click=self.save_event),
                     ]
                 ),
@@ -119,22 +145,54 @@ class NewEventView(BaseView):
                 dialog=NewCategoryAlert(func_on_dismiss=self.update_category_dropdown)
             )
 
+        else:
+            self.category = e.data
+
+    def select_reminder_time(self, e: ft.Event[ft.Dropdown]):
+        self.reminder_time = e.data
+
     def update_category_dropdown(self):
         categories = self.page.session.store.get("categories")
 
         if not categories:
             return
 
-        self.category_dropdown.options = [
-            ft.DropdownOption(
-                key=category["key"],
-                text=category["name"],
-                leading_icon=ft.Icon(icon=ft.Icons.CIRCLE, color=category["color"]),
+        self.category_dropdown.options = self.default_options
+        for category in categories:
+            self.category_dropdown.options.append(
+                ft.DropdownOption(
+                    key=category["key"],
+                    text=category["name"],
+                    leading_icon=ft.Icon(icon=ft.Icons.CIRCLE, color=category["color"]),
+                )
             )
-            for category in categories
-        ]
-        self.category_dropdown.options.insert(0, self.default_option)
 
         self.page.update()
 
-    def save_event(self): ...
+    def save_event(self):
+        event_name = self.event_name.value
+        location = self.location_input.value
+        description = self.event_description.value
+
+        has_error = False
+
+        if not event_name:
+            self.event_name.error = "Введіть назву події"
+            has_error = True
+        else:
+            self.event_name.error = None
+
+        if not self.date or not self.time:
+            self.page.show_dialog(dialog=SelectDateAndTime())
+
+        if not location:
+            self.location_input.error = "Введіть місце проведення"
+            has_error = True
+        else:
+            self.location_input.error = None
+
+        if has_error:
+            return
+
+    async def go_home(self):
+        await self.page.push_route("/")
