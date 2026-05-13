@@ -76,7 +76,12 @@ class LoginView(ft.View):
 
         self.page.session.store.set(key="authorized", value=True)
         self.page.session.store.set(
-            key="user", value={"email": user.email, "password_hash": user.password_hash}
+            key="user",
+            value={
+                "id": user.id,
+                "email": user.email,
+                "password_hash": user.password_hash,
+            },
         )
         await self.page.push_route("/")
 
