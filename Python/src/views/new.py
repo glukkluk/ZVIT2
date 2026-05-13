@@ -294,7 +294,8 @@ class NewEventView(BaseView):
                 category_id=category_id,
             )
 
-        await self.page.push_route("/")
+        await self.go_home()
 
-    async def go_home(self, e=None):
+    async def go_home(self):
+        self.RAIL.selected_index = 0
         await self.page.push_route("/")
