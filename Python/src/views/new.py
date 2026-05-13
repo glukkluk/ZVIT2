@@ -79,7 +79,6 @@ class NewEventView(BaseView):
             ),
         ]
 
-        # Build dropdown options: defaults + categories already in DB
         dropdown_options = list(self.default_options)
         for cat in db_categories:
             dropdown_options.append(
@@ -120,7 +119,6 @@ class NewEventView(BaseView):
             hint_text="Введіть деталі події...", multiline=True, min_lines=3
         )
 
-        # Inline error shown when date/time not selected
         self.datetime_error = ft.Text(
             value="Виберіть дату та час",
             color=ft.Colors.ERROR,
@@ -162,8 +160,6 @@ class NewEventView(BaseView):
             body_kwargs={"scroll": ft.ScrollMode.AUTO},
         )
 
-    # ── date/time picker handlers ────────────────────────────────────────
-
     def handle_date_picker_change(self, e: ft.Event[ft.DatePicker]):
         self.date = e.control.value.astimezone(ZoneInfo("Europe/Kiev")).date()
         self.select_date_button.content = self.date.strftime("%d.%m.%Y")
@@ -181,8 +177,6 @@ class NewEventView(BaseView):
 
     def show_time_picker(self, e=None):
         self.page.show_dialog(dialog=self.time_picker)
-
-    # ── category ─────────────────────────────────────────────────────────
 
     def select_category(self, e: ft.Event[ft.Dropdown]):
         if e.data == "new_category":
