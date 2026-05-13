@@ -6,7 +6,6 @@ from .notification import (
     NotAuthNotification,
     AuthenticationFailed,
     AccountAlreadyExists,
-    SelectDateAndTime,
 )
 from .appbar import MainAppBar
 from .alerts import NewCategoryAlert
@@ -22,5 +21,4 @@ __all__ = [
     "MainAppBar",
     "MainRail",
     "NewCategoryAlert",
-    "SelectDateAndTime",
 ]
