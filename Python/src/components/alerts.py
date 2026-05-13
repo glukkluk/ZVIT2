@@ -7,7 +7,9 @@ class NewCategoryAlert(ft.AlertDialog):
     def __init__(self, func_on_dismiss):
         self.category_name = ft.TextField(label="Назва категорії")
 
-        self.color_picker = ColorPicker(on_color_change=self.save_color)
+        self.color_picker = ColorPicker(
+            color="#808080", on_color_change=self.save_color
+        )
         self.custom_color: str | None = None
 
         super().__init__(
