@@ -1,7 +1,7 @@
 from datetime import date, time
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from models import Event
 
@@ -38,6 +38,7 @@ def create_event(
 def read_events_by_user(db: Session, user_id: int) -> list[Event]:
     stmt = (
         select(Event)
+        .options(joinedload(Event.category))
         .filter_by(user_id=user_id)
         .order_by(Event.event_date, Event.event_time)
     )
