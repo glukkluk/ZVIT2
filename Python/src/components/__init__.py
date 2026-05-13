@@ -10,6 +10,7 @@ from .notification import (
 from .appbar import MainAppBar
 from .alerts import NewCategoryAlert
 from .rail import MainRail
+from .event_card import EventCard
 
 __all__ = [
     "BaseView",
@@ -21,4 +22,5 @@ __all__ = [
     "MainAppBar",
     "MainRail",
     "NewCategoryAlert",
+    "EventCard",
 ]

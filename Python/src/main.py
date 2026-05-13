@@ -29,14 +29,10 @@ async def main(page: ft.Page):
         is_authorized = page.session.store.get(key="authorized")
         first_entry = page.session.store.get(key="first_entry")
 
-        # page.session.store.set(
-        #     "categories", [{"key": "robota", "name": "Робота", "color": "f2f2f2f2f2"}]
-        # )
-
         if is_authorized:
             match page.route:
                 case "/":
-                    page.views.append(HomeView())
+                    page.views.append(HomeView(data=page.session.store))
 
                 case "/login" | "/register":
                     await page.push_route("/")
