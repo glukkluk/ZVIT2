@@ -1,11 +1,15 @@
-from datetime import date
+from datetime import datetime, date
 from collections import defaultdict
+from zoneinfo import ZoneInfo
 
 import flet as ft
 
 from components import BaseView, EventCard
 from crud import read_events_by_user
 from db import Session
+
+
+TIMEZONE = ZoneInfo("Europe/Kiev")
 
 
 class HomeView(BaseView):
@@ -64,16 +68,17 @@ class HomeView(BaseView):
                 )
             ]
 
-        today = date.today()
+        today = datetime.now(TIMEZONE).today()
 
         grouped: dict[date, list] = defaultdict(list)
         for event in events:
-            grouped[event.event_date].append(event)
+            if event.event_date >= today.date() and event.event_time > today.time():
+                grouped[event.event_date].append(event)
 
         controls: list[ft.Control] = []
 
         for event_date in sorted(grouped.keys()):
-            label = self.date_label(event_date, today)
+            label = self.date_label(event_date, today.date())
 
             controls.append(
                 ft.Container(
@@ -104,8 +109,6 @@ class HomeView(BaseView):
             return "Сьогодні"
         elif delta == 1:
             return "Завтра"
-        elif delta == -1:
-            return "Вчора"
         else:
             MONTHS_UK = [
                 "січня",
