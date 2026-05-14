@@ -32,8 +32,8 @@ class EventCard(ft.Card):
                     spacing=4,
                     tight=True,
                 ),
-                bgcolor=ft.Colors.PRIMARY_CONTAINER,
                 padding=ft.Padding.symmetric(horizontal=8, vertical=3),
+                border=ft.Border.all(color=category.color),
                 border_radius=12,
             )
 
@@ -64,6 +64,7 @@ class EventCard(ft.Card):
                 ),
                 bgcolor=ft.Colors.PRIMARY_CONTAINER,
                 padding=ft.Padding.symmetric(horizontal=8, vertical=3),
+                # border=ft.Border.all(color=ft.Colors.SECONDARY),
                 border_radius=12,
             )
 
