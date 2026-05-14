@@ -1,3 +1,4 @@
+from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import flet as ft
@@ -10,6 +11,14 @@ from crud import (
     read_category_by_key,
 )
 from db import Session
+
+
+DATETIME_ERROR_MESSAGES = [
+    "Виберіть дату та час",
+    "Вибрана дата не може бути в минулому",
+]
+
+TIMEZONE = ZoneInfo("Europe/Kiev")
 
 
 class NewEventView(BaseView):
@@ -120,7 +129,7 @@ class NewEventView(BaseView):
         )
 
         self.datetime_error = ft.Text(
-            value="Виберіть дату та час",
+            value=DATETIME_ERROR_MESSAGES[0],
             color=ft.Colors.ERROR,
             size=12,
             visible=False,
@@ -161,7 +170,7 @@ class NewEventView(BaseView):
         )
 
     def handle_date_picker_change(self, e: ft.Event[ft.DatePicker]):
-        self.date = e.control.value.astimezone(ZoneInfo("Europe/Kiev")).date()
+        self.date = e.control.value.astimezone(TIMEZONE).date()
         self.select_date_button.content = self.date.strftime("%d.%m.%Y")
         self.datetime_error.visible = False
         self.page.update()
@@ -246,10 +255,22 @@ class NewEventView(BaseView):
             self.event_name.error = None
 
         if not self.date or not self.time:
+            self.datetime_error.value = DATETIME_ERROR_MESSAGES[0]
             self.datetime_error.visible = True
             has_error = True
         else:
-            self.datetime_error.visible = False
+            current_time = datetime.now(TIMEZONE)
+
+            if self.date == current_time.date() and self.time < current_time.time():
+                self.datetime_error.value = DATETIME_ERROR_MESSAGES[1]
+                self.datetime_error.visible = True
+                has_error = True
+            elif self.date < current_time.date():
+                self.datetime_error.value = DATETIME_ERROR_MESSAGES[1]
+                self.datetime_error.visible = True
+                has_error = True
+            else:
+                self.datetime_error.visible = False
 
         location = (self.location_input.value or "").strip()
         if not location:
