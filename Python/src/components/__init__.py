@@ -11,6 +11,7 @@ from .appbar import MainAppBar
 from .alerts import NewCategoryAlert
 from .rail import MainRail
 from .event_card import EventCard
+from .calendar_grid import CalendarGrid
 
 __all__ = [
     "BaseView",
@@ -23,4 +24,5 @@ __all__ = [
     "MainRail",
     "NewCategoryAlert",
     "EventCard",
+    "CalendarGrid",
 ]
