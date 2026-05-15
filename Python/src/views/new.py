@@ -11,6 +11,7 @@ from crud import (
     read_category_by_key,
 )
 from db import Session
+from utils import to_hexa, to_ahex
 
 
 DATETIME_ERROR_MESSAGES = [
@@ -39,7 +40,12 @@ class NewEventView(BaseView):
             with self.db_session() as db:
                 rows = read_categories_by_user(db=db, user_id=self.user_id)
                 db_categories = [
-                    {"key": c.key, "name": c.name, "color": c.color, "id": c.id}
+                    {
+                        "key": c.key,
+                        "name": c.name,
+                        "color": to_ahex(c.color),
+                        "id": c.id,
+                    }
                     for c in rows
                 ]
 
@@ -202,19 +208,19 @@ class NewEventView(BaseView):
             return
 
         with self.db_session() as db:
-            for cat in session_categories:
+            for category in session_categories:
                 existing = read_category_by_key(
-                    db=db, key=cat["key"], user_id=self.user_id
+                    db=db, key=category["key"], user_id=self.user_id
                 )
                 if not existing:
                     new_cat = create_category(
                         db=db,
-                        key=cat["key"],
-                        name=cat["name"],
-                        color=cat.get("color") or "#808080",
+                        key=category["key"],
+                        name=category["name"],
+                        color=category.get("color") or "#FF808080",
                         user_id=self.user_id,
                     )
-                    cat["id"] = new_cat.id
+                    category["id"] = new_cat.id
 
         self.update_category_dropdown()
 
@@ -223,13 +229,14 @@ class NewEventView(BaseView):
 
         self.category_dropdown.options = list(self.default_options)
         for category in categories:
+            color = category.get("color") or "#FF808080"
             self.category_dropdown.options.append(
                 ft.DropdownOption(
                     key=category["key"],
                     text=category["name"],
                     leading_icon=ft.Icon(
                         icon=ft.Icons.CIRCLE,
-                        color=category.get("color") or "#808080",
+                        color=to_ahex(color),
                     ),
                 )
             )
@@ -261,11 +268,9 @@ class NewEventView(BaseView):
         else:
             current_time = datetime.now(TIMEZONE)
 
-            if self.date == current_time.date() and self.time < current_time.time():
-                self.datetime_error.value = DATETIME_ERROR_MESSAGES[1]
-                self.datetime_error.visible = True
-                has_error = True
-            elif self.date < current_time.date():
+            if self.date < current_time.date() or (
+                self.date == current_time.date() and self.time < current_time.time()
+            ):
                 self.datetime_error.value = DATETIME_ERROR_MESSAGES[1]
                 self.datetime_error.visible = True
                 has_error = True

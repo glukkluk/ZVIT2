@@ -2,18 +2,22 @@ import flet as ft
 
 from models import Event
 
+from utils import adjust_lightness, to_ahex
+
 
 class EventCard(ft.Card):
     def __init__(self, event: Event):
         category = event.category
-        color = f"#{category.color.lstrip('#')}" if category else None
+        hex_color = category.color if category else None
+        if hex_color:
+            color = to_ahex(hex_color)
 
         time_str = event.event_time.strftime("%H:%M")
         location_str = event.location
 
         border_side = (
             ft.BorderSide(width=3, color=color)
-            if color
+            if hex_color
             else ft.BorderSide(width=1, color=ft.Colors.OUTLINE)
         )
 
@@ -22,7 +26,7 @@ class EventCard(ft.Card):
             category_chip = ft.Container(
                 content=ft.Row(
                     controls=[
-                        ft.Icon(icon=ft.Icons.CIRCLE, color=category.color, size=10),
+                        ft.Icon(icon=ft.Icons.CIRCLE, color=color, size=10),
                         ft.Text(
                             value=category.name,
                             size=12,
@@ -33,7 +37,7 @@ class EventCard(ft.Card):
                     tight=True,
                 ),
                 padding=ft.Padding.symmetric(horizontal=8, vertical=3),
-                border=ft.Border.all(color=category.color),
+                border=ft.Border.all(color=to_ahex(adjust_lightness(hex_color, 0.1))),
                 border_radius=12,
             )
 
@@ -64,7 +68,6 @@ class EventCard(ft.Card):
                 ),
                 bgcolor=ft.Colors.PRIMARY_CONTAINER,
                 padding=ft.Padding.symmetric(horizontal=8, vertical=3),
-                # border=ft.Border.all(color=ft.Colors.SECONDARY),
                 border_radius=12,
             )
 
@@ -138,6 +141,6 @@ class EventCard(ft.Card):
         super().__init__(
             content=content,
             shape=ft.RoundedRectangleBorder(radius=12),
-            shadow_color=color,
+            shadow_color=hex_color,
             clip_behavior=ft.ClipBehavior.ANTI_ALIAS,
         )

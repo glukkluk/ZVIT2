@@ -1,5 +1,4 @@
 from datetime import datetime, date
-from collections import defaultdict
 from zoneinfo import ZoneInfo
 
 import flet as ft
@@ -36,46 +35,59 @@ class HomeView(BaseView):
         with self.db_session() as db:
             events = read_events_by_user(db=db, user_id=self.user_id)
 
+        no_events = [
+            ft.Container(
+                content=ft.Column(
+                    controls=[
+                        ft.Icon(
+                            ft.Icons.EVENT_NOTE_OUTLINED,
+                            size=56,
+                            color=ft.Colors.OUTLINE,
+                        ),
+                        ft.Text(
+                            "Поки що немає активних подій",
+                            size=18,
+                            color=ft.Colors.ON_SURFACE_VARIANT,
+                            text_align=ft.TextAlign.CENTER,
+                        ),
+                        ft.Text(
+                            "Натисніть «+», щоб створити першу подію",
+                            size=13,
+                            color=ft.Colors.OUTLINE,
+                            text_align=ft.TextAlign.CENTER,
+                        ),
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    spacing=12,
+                ),
+                alignment=ft.Alignment.CENTER,
+                expand=True,
+                padding=ft.Padding.all(40),
+            )
+        ]
+
         if not events:
-            return [
-                ft.Container(
-                    content=ft.Column(
-                        controls=[
-                            ft.Icon(
-                                ft.Icons.EVENT_NOTE_OUTLINED,
-                                size=56,
-                                color=ft.Colors.OUTLINE,
-                            ),
-                            ft.Text(
-                                "Поки що немає подій",
-                                size=18,
-                                color=ft.Colors.ON_SURFACE_VARIANT,
-                                text_align=ft.TextAlign.CENTER,
-                            ),
-                            ft.Text(
-                                "Натисніть «+», щоб створити першу подію",
-                                size=13,
-                                color=ft.Colors.OUTLINE,
-                                text_align=ft.TextAlign.CENTER,
-                            ),
-                        ],
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                        spacing=12,
-                    ),
-                    alignment=ft.Alignment.CENTER,
-                    expand=True,
-                    padding=ft.Padding.all(40),
-                )
-            ]
+            return no_events
 
         today = datetime.now(TIMEZONE).today()
 
-        grouped: dict[date, list] = defaultdict(list)
-        for event in events:
-            if event.event_date >= today.date() and event.event_time > today.time():
-                grouped[event.event_date].append(event)
+        grouped: dict[date, list] = {}
+        inactive_events = []
+        for i, event in enumerate(events, 1):
+            if event.event_date < today.date() or (
+                event.event_date == today.date() and event.event_time < today.time()
+            ):
+                print(1)
+                inactive_events.append(event)
+            else:
+                grouped.setdefault(event.event_date, []).append(event)
 
-        controls: list[ft.Control] = []
+        if len(inactive_events) == i:
+            return no_events
+
+        controls: list[ft.Control] = [
+            ft.Text("Активні події", size=22, weight=ft.FontWeight.BOLD)
+        ]
 
         for event_date in sorted(grouped.keys()):
             label = self.date_label(event_date, today.date())
