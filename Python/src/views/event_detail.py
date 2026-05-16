@@ -1,7 +1,7 @@
 import flet as ft
 
 from components import BaseView
-from crud import read_event_by_id
+from crud import read_event_by_id, delete_event
 from db import Session
 from utils import to_ahex, adjust_lightness
 
@@ -46,12 +46,12 @@ def format_reminder(reminder_time: str) -> str | None:
     return f"За {amount} {REMINDER_LABELS.get(unit, '')}"
 
 
-def info_row(icon: str, label: str, value: str, color: str = None) -> ft.Control:
+def info_row(icon: str, label: str, value: str) -> ft.Control:
     return ft.Container(
         content=ft.Row(
             controls=[
                 ft.Container(
-                    content=ft.Icon(icon, size=20, color=color or ft.Colors.PRIMARY),
+                    content=ft.Icon(icon, size=20, color=ft.Colors.PRIMARY),
                     width=36,
                     height=36,
                     bgcolor=ft.Colors.PRIMARY_CONTAINER,
@@ -66,12 +66,7 @@ def info_row(icon: str, label: str, value: str, color: str = None) -> ft.Control
                             color=ft.Colors.ON_SURFACE_VARIANT,
                             weight=ft.FontWeight.W_500,
                         ),
-                        ft.Text(
-                            value,
-                            size=14,
-                            color=ft.Colors.ON_SURFACE,
-                            weight=ft.FontWeight.W_400,
-                        ),
+                        ft.Text(value, size=14, color=ft.Colors.ON_SURFACE),
                     ],
                     spacing=1,
                     tight=True,
@@ -86,33 +81,29 @@ def info_row(icon: str, label: str, value: str, color: str = None) -> ft.Control
 
 class EventDetailView(BaseView):
     def __init__(self, event_id: int):
+        self.event_id = event_id
+
+        self.RAIL.selected_index = None
+
         with Session() as db:
-            event = read_event_by_id(db=db, event_id=event_id)
+            event = read_event_by_id(db=db, event_id=self.event_id)
             if event:
-                name = event.name
-                event_date = event.event_date
-                event_time = event.event_time
-                location = event.location
-                description = event.description
-                reminder = event.reminder_time
-                category = event.category
-                cat_name = category.name if category else None
-                cat_color = category.color if category else None
+                self.name = event.name
+                self.event_date = event.event_date
+                self.event_time = event.event_time
+                self.location = event.location
+                self.description = event.description
+                self.reminder = event.reminder_time
+                self.category = event.category
             else:
-                name = None
+                self.name = None
 
         body = (
             self.build_controls(
-                name,
-                event_date,
-                event_time,
-                location,
-                description,
-                reminder,
-                cat_name,
-                cat_color,
+                cat_name=self.category.name if self.category else None,
+                cat_color=self.category.color if self.category else None,
             )
-            if name
+            if self.name
             else [ft.Text("Подію не знайдено.")]
         )
 
@@ -122,34 +113,53 @@ class EventDetailView(BaseView):
             body_kwargs={"scroll": ft.ScrollMode.AUTO},
         )
 
-    def build_controls(
-        self,
-        name,
-        event_date,
-        event_time,
-        location,
-        description,
-        reminder,
-        cat_name,
-        cat_color,
-    ) -> list[ft.Control]:
+    def build_controls(self, cat_name, cat_color) -> list[ft.Control]:
 
         color = to_ahex(cat_color) if cat_color else None
         light_color = to_ahex(adjust_lightness(cat_color, 0.3)) if cat_color else None
 
+        action_bar = ft.Row(
+            controls=[
+                ft.IconButton(
+                    icon=ft.Icons.ARROW_BACK_ROUNDED,
+                    tooltip="Назад",
+                    on_click=self.go_back,
+                ),
+                ft.Container(expand=True),
+                ft.IconButton(
+                    icon=ft.Icons.EDIT_OUTLINED,
+                    tooltip="Редагувати",
+                    on_click=self.go_edit,
+                ),
+                ft.IconButton(
+                    icon=ft.Icons.DELETE_OUTLINE_ROUNDED,
+                    tooltip="Видалити",
+                    icon_color=ft.Colors.ERROR,
+                    on_click=self.confirm_delete,
+                ),
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
+        )
+
         banner = ft.Container(
             content=ft.Column(
                 controls=[
+                    ft.Text(
+                        self.name,
+                        size=24,
+                        weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.ON_SURFACE,
+                    ),
                     ft.Container(
                         content=ft.Row(
                             controls=[
                                 ft.Icon(
                                     ft.Icons.CIRCLE,
                                     size=9,
-                                    color=color or ft.Colors.OUTLINE,
+                                    color=color if cat_color else ft.Colors.OUTLINE,
                                 ),
                                 ft.Text(
-                                    cat_name or "Без категорії",
+                                    cat_name if cat_name else "Без категорії",
                                     size=12,
                                     color=color or ft.Colors.ON_SURFACE_VARIANT,
                                     weight=ft.FontWeight.W_600,
@@ -162,14 +172,6 @@ class EventDetailView(BaseView):
                         padding=ft.Padding.symmetric(horizontal=10, vertical=4),
                         border_radius=20,
                         border=ft.Border.all(color=color or ft.Colors.OUTLINE_VARIANT),
-                    )
-                    if cat_name
-                    else ft.Container(),
-                    ft.Text(
-                        name,
-                        size=24,
-                        weight=ft.FontWeight.BOLD,
-                        color=ft.Colors.ON_SURFACE,
                     ),
                 ],
                 spacing=10,
@@ -182,16 +184,17 @@ class EventDetailView(BaseView):
             bgcolor=ft.Colors.SURFACE_CONTAINER_LOWEST,
         )
 
-        date_str = format_date(event_date)
-        time_str = event_time.strftime("%H:%M")
-        reminder_str = format_reminder(reminder)
-
+        reminder_str = format_reminder(self.reminder)
         detail_rows: list[ft.Control] = [
-            info_row(ft.Icons.CALENDAR_TODAY_OUTLINED, "Дата", date_str),
+            info_row(
+                ft.Icons.CALENDAR_TODAY_OUTLINED, "Дата", format_date(self.event_date)
+            ),
             ft.Divider(height=1, color=ft.Colors.OUTLINE_VARIANT),
-            info_row(ft.Icons.ACCESS_TIME_OUTLINED, "Час", time_str),
+            info_row(
+                ft.Icons.ACCESS_TIME_OUTLINED, "Час", self.event_time.strftime("%H:%M")
+            ),
             ft.Divider(height=1, color=ft.Colors.OUTLINE_VARIANT),
-            info_row(ft.Icons.LOCATION_ON_OUTLINED, "Місце", location),
+            info_row(ft.Icons.LOCATION_ON_OUTLINED, "Місце", self.location),
         ]
 
         if reminder_str:
@@ -211,7 +214,7 @@ class EventDetailView(BaseView):
         )
 
         desc_section: list[ft.Control] = []
-        if description:
+        if self.description:
             desc_section = [
                 ft.Text(
                     "Опис",
@@ -221,7 +224,7 @@ class EventDetailView(BaseView):
                 ),
                 ft.Container(
                     content=ft.Text(
-                        description,
+                        self.description,
                         size=14,
                         color=ft.Colors.ON_SURFACE,
                         selectable=True,
@@ -237,6 +240,7 @@ class EventDetailView(BaseView):
             ft.Container(
                 content=ft.Column(
                     controls=[
+                        action_bar,
                         banner,
                         ft.Text(
                             "Деталі",
@@ -252,3 +256,52 @@ class EventDetailView(BaseView):
                 padding=ft.Padding.all(16),
             )
         ]
+
+    async def go_back(self):
+        navigated_from = self.page.session.store.get("navigated_from")
+
+        if navigated_from:
+            match navigated_from:
+                case "/":
+                    self.RAIL.selected_index = 0
+                case "/calendar":
+                    self.RAIL.selected_index = 1
+
+            await self.page.push_route(navigated_from)
+        else:
+            await self.page.push_route("/")
+
+        self.page.session.store.set("navigated_from", None)
+
+    async def go_edit(self):
+        await self.page.push_route(f"/edit/{self.event_id}")
+
+    def confirm_delete(self):
+        def cancel(e=None):
+            self.page.pop_dialog()
+
+        async def do_delete(e):
+            with Session() as db:
+                delete_event(db=db, event_id=self.event_id)
+
+            cancel()
+
+            await self.go_back()
+
+        dlg = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("Видалити подію?"),
+            content=ft.Text("Цю дію не можна скасувати."),
+            actions=[
+                ft.TextButton("Скасувати", on_click=cancel),
+                ft.FilledButton(
+                    "Видалити",
+                    style=ft.ButtonStyle(
+                        bgcolor=ft.Colors.ERROR, color=ft.Colors.ON_ERROR
+                    ),
+                    on_click=do_delete,
+                ),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )
+        self.page.show_dialog(dlg)

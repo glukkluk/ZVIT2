@@ -13,6 +13,7 @@ from views import (
     NotificationsView,
     ReminderView,
     EventDetailView,
+    EditEventView,
 )
 
 
@@ -55,9 +56,14 @@ async def main(page: ft.Page):
                     page.views.append(ReminderView())
 
                 case _:
+                    event_id = int(page.route.split("/")[-1])
                     if page.route.startswith("/event/"):
-                        event_id = int(page.route.split("/")[-1])
                         page.views.append(EventDetailView(event_id=event_id))
+
+                    elif page.route.startswith("/edit/"):
+                        page.views.append(
+                            EditEventView(data=page.session.store, event_id=event_id)
+                        )
 
         else:
             match page.route:
