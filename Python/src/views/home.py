@@ -77,7 +77,6 @@ class HomeView(BaseView):
             if event.event_date < today.date() or (
                 event.event_date == today.date() and event.event_time < today.time()
             ):
-                print(1)
                 inactive_events.append(event)
             else:
                 grouped.setdefault(event.event_date, []).append(event)
@@ -107,7 +106,9 @@ class HomeView(BaseView):
             for event in grouped[event_date]:
                 controls.append(
                     ft.Container(
-                        content=EventCard(event),
+                        content=EventCard(
+                            event, on_click=self.make_event_handler(event.id)
+                        ),
                         padding=ft.Padding.symmetric(horizontal=4, vertical=2),
                     )
                 )
@@ -140,6 +141,12 @@ class HomeView(BaseView):
             if event_date.year != today.year:
                 day_str += f" {event_date.year}"
             return day_str
+
+    def make_event_handler(self, event_id: int):
+        async def handler(e):
+            await self.page.push_route(f"/event/{event_id}")
+
+        return handler
 
     async def go_to_new_page(self):
         await self.page.push_route("/new")

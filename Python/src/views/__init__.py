@@ -1,4 +1,5 @@
 from .home import HomeView
+from .event_detail import EventDetailView
 from .login import LoginView
 from .register import RegisterView
 from .new import NewEventView
@@ -9,6 +10,7 @@ from .notifications import NotificationsView
 
 __all__ = [
     "HomeView",
+    "EventDetailView",
     "LoginView",
     "RegisterView",
     "NewEventView",

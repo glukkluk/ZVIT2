@@ -12,6 +12,7 @@ from views import (
     CalendarView,
     NotificationsView,
     ReminderView,
+    EventDetailView,
 )
 
 
@@ -52,6 +53,11 @@ async def main(page: ft.Page):
 
                 case "/reminder":
                     page.views.append(ReminderView())
+
+                case _:
+                    if page.route.startswith("/event/"):
+                        event_id = int(page.route.split("/")[-1])
+                        page.views.append(EventDetailView(event_id=event_id))
 
         else:
             match page.route:

@@ -6,7 +6,7 @@ from utils import adjust_lightness, to_ahex
 
 
 class EventCard(ft.Card):
-    def __init__(self, event: Event):
+    def __init__(self, event: Event, on_click=None):
         category = event.category
         hex_color = category.color if category else None
         if hex_color:
@@ -136,6 +136,7 @@ class EventCard(ft.Card):
             padding=ft.Padding.all(16),
             border=ft.Border(left=border_side),
             border_radius=ft.BorderRadius.all(12),
+            on_click=on_click if on_click else None,
         )
 
         super().__init__(
