@@ -36,7 +36,10 @@ class CalendarGrid(ft.Column):
         self.events_by_date: dict[date, dict[str, list[str]]] = {}
         for e in events:
             color = to_ahex(e.category.color) if e.category else "#808080"
-            self.events_by_date.setdefault(e.event_date, {"titles": [], "colors": []})
+            self.events_by_date.setdefault(
+                e.event_date, {"ids": [], "titles": [], "colors": []}
+            )
+            self.events_by_date[e.event_date]["ids"].append(e.id)
             self.events_by_date[e.event_date]["titles"].append(e.name)
             self.events_by_date[e.event_date]["colors"].append(color)
 
@@ -56,8 +59,6 @@ class CalendarGrid(ft.Column):
     def refresh_calendar(self):
         self.controls = self.build_controls()
         self.update()
-
-    # --- Header -------------------------------------------------------- #
 
     def build_header(self) -> ft.Control:
         month_name = MONTHS_UK[self.month - 1]
@@ -150,8 +151,6 @@ class CalendarGrid(ft.Column):
             padding=ft.Padding.symmetric(horizontal=16, vertical=12),
         )
 
-    # --- Weekday labels ------------------------------------------------ #
-
     def build_weekday_row(self) -> ft.Control:
         cells = []
         for label in WEEKDAY_LABELS:
@@ -177,10 +176,8 @@ class CalendarGrid(ft.Column):
             border=ft.Border.only(bottom=ft.BorderSide(1, ft.Colors.OUTLINE_VARIANT)),
         )
 
-    # --- Day grid ------------------------------------------------------ #
-
     def build_day_rows(self) -> list[ft.Control]:
-        cal = calendar.Calendar(firstweekday=0)  # Monday first
+        cal = calendar.Calendar(firstweekday=0)
         weeks = cal.monthdatescalendar(self.year, self.month)
         rows = []
         for week in weeks:
@@ -205,7 +202,9 @@ class CalendarGrid(ft.Column):
         is_today = d == self.today
         is_weekend = d.weekday() >= 5
 
-        if not in_month:
+        if is_today:
+            num_color = ft.Colors.ON_PRIMARY
+        elif not in_month:
             num_color = ft.Colors.OUTLINE
         elif is_weekend:
             num_color = ft.Colors.ERROR
@@ -234,17 +233,31 @@ class CalendarGrid(ft.Column):
                 color=num_color,
             )
 
+        def go_to_event_details(event_id: int):
+            async def handler(e):
+                self.page.session.store.set("navigated_from", self.page.route)
+                await self.page.push_route(f"/event/{event_id}")
+
+            return handler
+
+        def handle_badge_hover(e: ft.Event[ft.Container]):
+            if e.data:
+                e.control.border = ft.Border.all(
+                    width=1,
+                    color=to_ahex(adjust_lightness(to_hexa(e.control.bgcolor), -0.2)),
+                )
+            else:
+                e.control.border = None
+
         badges: list[ft.Row] = []
         if d in self.events_by_date:
-            e_titles, e_colors = self.events_by_date[d].values()
-            for title, color in zip(e_titles[:2], e_colors[:2]):
+            e_ids, e_titles, e_colors = self.events_by_date[d].values()
+            for e_id, title, color in zip(e_ids, e_titles[:2], e_colors[:2]):
                 badges.append(
                     ft.Container(
                         content=ft.Row(
                             controls=[
-                                ft.Container(
-                                    width=7, height=7, bgcolor=color, border_radius=4
-                                ),
+                                ft.Icon(icon=ft.Icons.CIRCLE, size=8, color=color),
                                 ft.Text(
                                     value=title,
                                     size=12,
@@ -255,11 +268,13 @@ class CalendarGrid(ft.Column):
                         ),
                         border_radius=4,
                         bgcolor=to_ahex(adjust_lightness(to_hexa(color), 0.3)),
-                        padding=ft.Padding.symmetric(horizontal=5),
+                        padding=ft.Padding.symmetric(vertical=3, horizontal=5),
+                        on_click=go_to_event_details(event_id=e_id),
+                        on_hover=handle_badge_hover,
                     )
                 )
 
-            if len(e_titles) >= 2:
+            if len(e_titles) > 2:
                 badges.append(
                     ft.Row(
                         controls=[
@@ -273,14 +288,12 @@ class CalendarGrid(ft.Column):
                 )
 
         cell_content = ft.Column(
-            # controls=[day_label, dot_row],
             controls=[day_label, *badges],
             spacing=4,
             horizontal_alignment=ft.CrossAxisAlignment.START,
             tight=True,
         )
 
-        # Subtle background for current-month cells vs. out-of-month
         bgcolor = ft.Colors.SURFACE if in_month else ft.Colors.SURFACE_CONTAINER_HIGHEST
 
         return ft.Container(

@@ -144,6 +144,7 @@ class HomeView(BaseView):
 
     def make_event_handler(self, event_id: int):
         async def handler(e):
+            self.page.session.store.set("navigated_from", self.page.route)
             await self.page.push_route(f"/event/{event_id}")
 
         return handler

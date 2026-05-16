@@ -217,7 +217,7 @@ class NewEventView(BaseView):
                         db=db,
                         key=category["key"],
                         name=category["name"],
-                        color=category.get("color") or "#FF808080",
+                        color=to_hexa(category.get("color")) or "#FF808080",
                         user_id=self.user_id,
                     )
                     category["id"] = new_cat.id

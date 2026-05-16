@@ -8,6 +8,7 @@ class MainRail(ft.NavigationRail):
         super().__init__(
             selected_index=index,
             extended=True,
+            min_extended_width=200,
             on_change=self.go_to_page,
             destinations=[
                 ft.NavigationRailDestination(
