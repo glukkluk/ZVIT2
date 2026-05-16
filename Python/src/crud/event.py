@@ -55,3 +55,29 @@ def delete_event(db: Session, event_id: int) -> None:
     if event:
         db.delete(event)
         db.commit()
+
+
+def update_event(
+    db: Session,
+    event_id: int,
+    name: str,
+    event_date,
+    event_time,
+    location: str,
+    reminder_time: str = "no",
+    description: str | None = None,
+    category_id: int | None = None,
+) -> Event | None:
+    event = read_event_by_id(db=db, event_id=event_id)
+    if not event:
+        return None
+    event.name = name
+    event.event_date = event_date
+    event.event_time = event_time
+    event.location = location
+    event.reminder_time = reminder_time
+    event.description = description
+    event.category_id = category_id
+    db.commit()
+    db.refresh(event)
+    return event

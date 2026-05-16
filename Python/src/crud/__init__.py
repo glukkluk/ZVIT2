@@ -13,6 +13,7 @@ __all__ = [
     "read_events_by_user",
     "read_event_by_id",
     "delete_event",
+    "update_event",
     "create_category",
     "read_categories_by_user",
     "read_category_by_key",
