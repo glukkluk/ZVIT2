@@ -28,7 +28,6 @@ class EditEventView(BaseView):
         self.event_id = event_id
         self.user_id = data.get("user")["id"] if data.get("user") else None
 
-        # Load event data
         with self.db_session() as db:
             event = read_event_by_id(db=db, event_id=event_id)
             if not event:
@@ -37,7 +36,6 @@ class EditEventView(BaseView):
                 )
                 return
 
-            # Read while session is open
             self.name = event.name
             self.date = event.event_date
             self.time = event.event_time
@@ -46,11 +44,6 @@ class EditEventView(BaseView):
             self.reminder = event.reminder_time
             self.category_id = event.category_id
             self.category_key = event.category.key if event.category else "none"
-
-        # self.date = self._init_date
-        # self.time = self._init_time
-        # self.category_key = self._init_cat_key
-        # self.reminder_time = self._init_reminder
 
         self.RAIL.selected_index = None
 
@@ -307,6 +300,9 @@ class EditEventView(BaseView):
                 )
                 if cat:
                     category_id = cat.id
+
+        if not hasattr(self, "reminder_time"):
+            self.reminder_time = self.reminder
 
         with self.db_session() as db:
             update_event(
