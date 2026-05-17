@@ -9,6 +9,7 @@ from crud import (
     read_categories_by_user,
     read_category_by_key,
     read_event_by_id,
+    unmark_fired,
 )
 from db import Session
 from utils import to_ahex
@@ -303,6 +304,9 @@ class EditEventView(BaseView):
 
         if not hasattr(self, "reminder_time"):
             self.reminder_time = self.reminder
+
+        with self.db_session() as db:
+            unmark_fired(db=db, user_id=self.user_id, event_id=self.event_id)
 
         with self.db_session() as db:
             update_event(
