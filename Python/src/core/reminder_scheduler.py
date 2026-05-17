@@ -67,7 +67,6 @@ async def scheduler_loop(page: ft.Page, user_id: int) -> None:
             break
 
         pending = pending_reminders(user_id)
-        print(f"Pending: {pending}")
 
         if not pending:
             await asyncio.sleep(MAX_SLEEP)
@@ -76,13 +75,11 @@ async def scheduler_loop(page: ft.Page, user_id: int) -> None:
         next_dt, next_id, next_name = pending[0]
         now = datetime.now(TIMEZONE)
         wait = (next_dt - now).total_seconds()
-        print(f"Next event date: {next_dt}. Wait: {wait}")
 
         if wait > 0:
             slept = 0.0
             while slept < wait:
                 chunk = min(MAX_SLEEP, wait - slept)
-                print(f"Chunk: {chunk}")
                 await asyncio.sleep(chunk)
                 slept += chunk
 
@@ -91,7 +88,6 @@ async def scheduler_loop(page: ft.Page, user_id: int) -> None:
 
                 if chunk < wait - slept + chunk:
                     fresh = pending_reminders(user_id)
-                    print(fresh)
                     if fresh and fresh[0][1] != next_id:
                         break
             else:
