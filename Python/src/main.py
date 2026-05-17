@@ -53,7 +53,7 @@ async def main(page: ft.Page):
                     page.views.append(NotificationsView())
 
                 case "/reminder":
-                    page.views.append(ReminderView())
+                    page.views.append(ReminderView(data=page.session.store))
 
                 case _:
                     event_id = int(page.route.split("/")[-1])
