@@ -8,7 +8,7 @@ from .notification import (
     AccountAlreadyExists,
 )
 from .appbar import MainAppBar
-from .alerts import NewCategoryAlert
+from .alerts import NewCategoryAlert, ReminderAlert
 from .rail import MainRail
 from .event_card import EventCard
 from .calendar_grid import CalendarGrid
@@ -23,6 +23,7 @@ __all__ = [
     "MainAppBar",
     "MainRail",
     "NewCategoryAlert",
+    "ReminderAlert",
     "EventCard",
     "CalendarGrid",
 ]

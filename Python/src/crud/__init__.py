@@ -1,6 +1,7 @@
 from .user import *
 from .event import *
 from .category import *
+from .fired_reminder import *
 
 
 __all__ = [
@@ -18,4 +19,8 @@ __all__ = [
     "read_categories_by_user",
     "read_category_by_key",
     "delete_category",
+    "get_fired",
+    "has_fired",
+    "mark_fired",
+    "unmark_fired",
 ]

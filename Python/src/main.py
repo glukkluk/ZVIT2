@@ -1,6 +1,7 @@
 import flet as ft
 
 from components import AlreadyAuthNotification, NotAuthNotification
+from core.reminder_scheduler import start_scheduler
 from db import init_database
 
 from views import (
@@ -32,6 +33,11 @@ async def main(page: ft.Page):
         first_entry = page.session.store.get(key="first_entry")
 
         if is_authorized:
+            if not getattr(page, "scheduler_task", None) or page.scheduler_task.done():
+                user = page.session.store.get("user")
+                if user:
+                    page.scheduler_task = start_scheduler(page, user["id"])
+
             match page.route:
                 case "/":
                     page.views.append(HomeView(data=page.session.store))
