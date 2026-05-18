@@ -8,16 +8,28 @@ from core.security import verify_password
 
 
 class NewCategoryAlert(ft.AlertDialog):
-    def __init__(self, func_on_dismiss):
-        self.category_name = ft.TextField(label="Назва категорії")
+    def __init__(
+        self, func_on_dismiss, initial_name: str = "", initial_color: str = "#808080"
+    ):
+        self.func_on_dismiss = func_on_dismiss
+        self.committed = False
+
+        self.category_name = ft.TextField(
+            label="Назва категорії",
+            value=initial_name,
+        )
 
         self.color_picker = ColorPicker(
-            color="#808080", on_color_change=self.save_color
+            color=initial_color,
+            on_color_change=self.save_color,
         )
-        self.custom_color: str | None = None
+        self.custom_color: str = initial_color
+
+        is_edit = bool(initial_name)
+        title = "Редагувати категорію" if is_edit else "Нова категорія"
 
         super().__init__(
-            title="Нова категорія",
+            title=title,
             content=ft.Column(
                 controls=[
                     self.category_name,
@@ -29,44 +41,31 @@ class NewCategoryAlert(ft.AlertDialog):
                 ft.TextButton(content="Скасувати", on_click=self.close),
                 ft.TextButton(content="Ок", on_click=self.add_category),
             ],
-            on_dismiss=func_on_dismiss,
+            on_dismiss=self.do_on_dismiss,
             modal=True,
         )
 
     def save_color(self, e: ft.ControlEvent):
         self.custom_color = e.data
 
-    def add_category(self):
-        category = self.category_name.value
-        category_key = cyrtranslit.to_latin(category, "ua").lower()
-        categories: list[dict] = self.page.session.store.get("categories")
+    def add_category(self, e=None):
+        name = (self.category_name.value or "").strip()
 
-        if not category:
+        if not name:
             self.category_name.error = "Введіть назву нової категорії"
+            self.page.update()
             return
-        else:
-            self.category_name.error = None
 
-        if categories:
-            for saved_category in categories:
-                if category_key == saved_category.get("key"):
-                    self.category_name.error = "Така категорія вже існує!"
-                    return
-
-        else:
-            categories = []
-
-        categories.append(
-            {
-                "name": category,
-                "key": category_key,
-                "color": self.custom_color,
-            }
-        )
-
-        self.page.session.store.set(key="categories", value=categories)
-
+        self.category_name.error = None
+        self.committed = True
         self.close()
+
+    def do_on_dismiss(self, e=None):
+        if self.committed:
+            name = (self.category_name.value or "").strip()
+            color = self.custom_color
+            key = cyrtranslit.to_latin(name, "ua").lower().replace(" ", "_")
+            self.func_on_dismiss(name, color, key)
 
     def close(self):
         self.page.pop_dialog()

@@ -12,6 +12,7 @@ from .alerts import NewCategoryAlert, ReminderAlert, ConfirmDeleteAccountAlert
 from .rail import MainRail
 from .event_card import EventCard
 from .calendar_grid import CalendarGrid
+from .category_panel import CategoryPanel
 
 __all__ = [
     "BaseView",
@@ -24,7 +25,8 @@ __all__ = [
     "MainRail",
     "NewCategoryAlert",
     "ReminderAlert",
+    "ConfirmDeleteAccountAlert",
     "EventCard",
     "CalendarGrid",
-    "ConfirmDeleteAccountAlert",
+    "CategoryPanel",
 ]
