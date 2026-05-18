@@ -47,7 +47,7 @@ async def main(page: ft.Page):
                     page.show_dialog(dialog=AlreadyAuthNotification())
 
                 case "/profile":
-                    page.views.append(ProfileView())
+                    page.views.append(ProfileView(data=page.session.store))
 
                 case "/new":
                     page.views.append(NewEventView(data=page.session.store))
