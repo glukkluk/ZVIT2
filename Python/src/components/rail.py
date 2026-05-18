@@ -35,9 +35,6 @@ class MainRail(ft.NavigationRail):
         )
 
     async def go_to_page(self, e: ft.Event[ft.NavigationRail]):
-        if e.data == self.current_selected_index:
-            return
-
         self.current_selected_index = e.data
 
         match e.control.selected_index:
