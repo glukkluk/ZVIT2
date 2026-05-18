@@ -18,6 +18,7 @@ __all__ = [
     "create_category",
     "read_categories_by_user",
     "read_category_by_key",
+    "update_category",
     "delete_category",
     "get_fired",
     "has_fired",
