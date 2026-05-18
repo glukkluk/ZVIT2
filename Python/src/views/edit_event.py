@@ -2,10 +2,9 @@ from zoneinfo import ZoneInfo
 
 import flet as ft
 
-from components import BaseView, NewCategoryAlert
+from components import BaseView
 from crud import (
     update_event,
-    create_category,
     read_categories_by_user,
     read_category_by_key,
     read_event_by_id,
@@ -96,9 +95,6 @@ class EditEventView(BaseView):
         )
 
         self.default_options = [
-            ft.DropdownOption(
-                key="new_category", text="Додати категорію", trailing_icon=ft.Icons.ADD
-            ),
             ft.DropdownOption(
                 key="none", text="Без категорії", leading_icon=ft.Icons.BLOCK
             ),
@@ -206,46 +202,7 @@ class EditEventView(BaseView):
         self.page.show_dialog(dialog=self.time_picker)
 
     def select_category(self, e: ft.Event):
-        if e.data == "new_category":
-            self.page.show_dialog(
-                dialog=NewCategoryAlert(func_on_dismiss=self.on_new_category_dismiss)
-            )
-        else:
-            self.category_key = e.data
-
-    def on_new_category_dismiss(self):
-        session_categories: list[dict] = self.page.session.store.get("categories") or []
-        if not self.user_id or not session_categories:
-            return
-        with self.db_session() as db:
-            for category in session_categories:
-                existing = read_category_by_key(
-                    db=db, key=category["key"], user_id=self.user_id
-                )
-                if not existing:
-                    new_cat = create_category(
-                        db=db,
-                        key=category["key"],
-                        name=category["name"],
-                        color=category.get("color") or "#FF808080",
-                        user_id=self.user_id,
-                    )
-                    category["id"] = new_cat.id
-        self.update_category_dropdown()
-
-    def update_category_dropdown(self):
-        categories: list[dict] = self.page.session.store.get("categories") or []
-        self.category_dropdown.options = list(self.default_options)
-        for category in categories:
-            color = category.get("color") or "#FF808080"
-            self.category_dropdown.options.append(
-                ft.DropdownOption(
-                    key=category["key"],
-                    text=category["name"],
-                    leading_icon=ft.Icon(icon=ft.Icons.CIRCLE, color=to_ahex(color)),
-                )
-            )
-        self.page.update()
+        self.category_key = e.data
 
     def select_reminder_time(self, e: ft.Event):
         self.reminder_time = e.data

@@ -3,7 +3,7 @@ from zoneinfo import ZoneInfo
 
 import flet as ft
 
-from components import BaseView, EventCard
+from components import BaseView, EventCard, CategoryPanel
 from crud import read_events_by_user
 from db import Session
 
@@ -16,19 +16,37 @@ class HomeView(BaseView):
         self.db_session = Session
         self.user_id = data.get("user")["id"] if data.get("user") else None
 
-        body = self.build_body()
+        events_col = ft.Column(
+            controls=self.build_events(),
+            scroll=ft.ScrollMode.AUTO,
+            expand=2,
+            alignment=ft.MainAxisAlignment.START,
+        )
+
+        cat_panel = (
+            CategoryPanel(user_id=self.user_id) if self.user_id else ft.Container()
+        )
+
+        body_row = ft.Row(
+            controls=[
+                events_col,
+                ft.VerticalDivider(width=1),
+                cat_panel,
+            ],
+            expand=True,
+            vertical_alignment=ft.CrossAxisAlignment.START,
+        )
 
         super().__init__(
             route="/",
-            body=body,
-            body_kwargs={"scroll": ft.ScrollMode.AUTO},
+            body=[body_row],
         )
 
         self.floating_action_button = ft.FloatingActionButton(
             content="Створити", icon=ft.Icons.ADD, on_click=self.go_to_new_page
         )
 
-    def build_body(self) -> list[ft.Control]:
+    def build_events(self) -> list[ft.Control]:
         if not self.user_id:
             return [ft.Text("Не вдалося завантажити події.")]
 
@@ -85,7 +103,10 @@ class HomeView(BaseView):
             return no_events
 
         controls: list[ft.Control] = [
-            ft.Text("Активні події", size=22, weight=ft.FontWeight.BOLD)
+            ft.Container(
+                content=ft.Text("Активні події", size=22, weight=ft.FontWeight.BOLD),
+                padding=ft.Padding.only(left=4, top=8, bottom=4),
+            )
         ]
 
         for event_date in sorted(grouped.keys()):
