@@ -14,8 +14,8 @@ from utils import to_ahex, to_hexa, adjust_lightness
 
 class CategoryPanel(ft.Column):
     def __init__(self, user_id: int):
-        self._user_id = user_id
-        self._list_col = ft.Column(spacing=4, tight=True)
+        self.user_id = user_id
+        self.list_col = ft.Column(spacing=4, tight=True)
 
         super().__init__(
             spacing=0,
@@ -29,7 +29,7 @@ class CategoryPanel(ft.Column):
                                 icon=ft.Icons.ADD_CIRCLE_OUTLINE,
                                 icon_size=20,
                                 tooltip="Додати категорію",
-                                on_click=self._open_add_dialog,
+                                on_click=self.open_add_dialog,
                             ),
                         ],
                         alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
@@ -40,7 +40,7 @@ class CategoryPanel(ft.Column):
                 ft.Divider(height=1),
                 ft.Container(
                     content=ft.Column(
-                        controls=[self._list_col],
+                        controls=[self.list_col],
                         scroll=ft.ScrollMode.AUTO,
                     ),
                     expand=True,
@@ -48,16 +48,16 @@ class CategoryPanel(ft.Column):
             ],
         )
 
-        self._refresh_list()
+        self.refresh_list()
 
-    def _refresh_list(self):
+    def refresh_list(self):
         with Session() as db:
-            cats = read_categories_by_user(db=db, user_id=self._user_id)
+            cats = read_categories_by_user(db=db, user_id=self.user_id)
 
         if cats:
-            self._list_col.controls = [self._category_row(c) for c in cats]
+            self.list_col.controls = [self.category_row(c) for c in cats]
         else:
-            self._list_col.controls = [
+            self.list_col.controls = [
                 ft.Container(
                     content=ft.Text(
                         "Немає категорій",
@@ -69,12 +69,9 @@ class CategoryPanel(ft.Column):
                     padding=ft.Padding.all(16),
                 )
             ]
-        try:
-            self.update()
-        except Exception:
-            pass
+        self.update()
 
-    def _category_row(self, cat) -> ft.Control:
+    def category_row(self, cat) -> ft.Control:
         color_display = to_ahex(cat.color)
         light = to_ahex(adjust_lightness(cat.color, 0.25))
 
@@ -97,7 +94,7 @@ class CategoryPanel(ft.Column):
                         icon=ft.Icons.EDIT_OUTLINED,
                         icon_size=16,
                         tooltip="Редагувати",
-                        on_click=lambda e, c=cat: self._open_edit_dialog(c),
+                        on_click=lambda e, c=cat: self.open_edit_dialog(c),
                         style=ft.ButtonStyle(padding=ft.Padding.all(4)),
                     ),
                     ft.IconButton(
@@ -105,7 +102,7 @@ class CategoryPanel(ft.Column):
                         icon_size=16,
                         icon_color=ft.Colors.ERROR,
                         tooltip="Видалити",
-                        on_click=lambda e, c=cat: self._confirm_delete(c),
+                        on_click=lambda e, c=cat: self.confirm_delete(c),
                         style=ft.ButtonStyle(padding=ft.Padding.all(4)),
                     ),
                 ],
@@ -117,24 +114,24 @@ class CategoryPanel(ft.Column):
             padding=ft.Padding.symmetric(horizontal=10, vertical=6),
         )
 
-    def _open_add_dialog(self, e=None):
+    def open_add_dialog(self, e=None):
         def on_save(name: str, color: str, key: str):
             color_argb = to_hexa(color)
             with Session() as db:
-                existing = read_category_by_key(db=db, key=key, user_id=self._user_id)
+                existing = read_category_by_key(db=db, key=key, user_id=self.user_id)
                 if not existing:
                     create_category(
                         db=db,
                         key=key,
                         name=name,
                         color=color_argb,
-                        user_id=self._user_id,
+                        user_id=self.user_id,
                     )
-            self._refresh_list()
+            self.refresh_list()
 
         self.page.show_dialog(NewCategoryAlert(func_on_dismiss=on_save))
 
-    def _open_edit_dialog(self, cat):
+    def open_edit_dialog(self, cat):
         def on_save(name: str, color: str, key: str):
             color_argb = to_hexa(color)
             with Session() as db:
@@ -145,7 +142,7 @@ class CategoryPanel(ft.Column):
                     name=name,
                     color=color_argb,
                 )
-            self._refresh_list()
+            self.refresh_list()
 
         self.page.show_dialog(
             NewCategoryAlert(
@@ -155,7 +152,7 @@ class CategoryPanel(ft.Column):
             )
         )
 
-    def _confirm_delete(self, cat):
+    def confirm_delete(self, cat):
         def cancel(e=None):
             self.page.pop_dialog()
 
@@ -164,7 +161,7 @@ class CategoryPanel(ft.Column):
                 delete_category(db=db, category_id=cat.id)
 
             cancel()
-            self._refresh_list()
+            self.refresh_list()
 
         dlg = ft.AlertDialog(
             modal=True,
