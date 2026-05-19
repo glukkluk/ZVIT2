@@ -10,7 +10,8 @@ from .notification import (
 from .appbar import MainAppBar
 from .alerts import NewCategoryAlert, ReminderAlert, ConfirmDeleteAccountAlert
 from .rail import MainRail
-from .event_card import EventCard
+from .cards import EventCard, DetailsCard, NotificationCard
+
 from .calendar_grid import CalendarGrid
 from .category_panel import CategoryPanel
 
@@ -27,6 +28,8 @@ __all__ = [
     "ReminderAlert",
     "ConfirmDeleteAccountAlert",
     "EventCard",
+    "DetailsCard",
+    "NotificationCard",
     "CalendarGrid",
     "CategoryPanel",
 ]

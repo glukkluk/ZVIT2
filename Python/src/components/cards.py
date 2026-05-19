@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import flet as ft
 
 from models import Event
@@ -136,7 +138,7 @@ class EventCard(ft.Card):
             padding=ft.Padding.all(16),
             border=ft.Border(left=border_side),
             border_radius=ft.BorderRadius.all(12),
-            on_click=on_click if on_click else None,
+            on_click=on_click,
         )
 
         super().__init__(
@@ -144,4 +146,75 @@ class EventCard(ft.Card):
             shape=ft.RoundedRectangleBorder(radius=12),
             shadow_color=hex_color,
             clip_behavior=ft.ClipBehavior.ANTI_ALIAS,
+        )
+
+
+class DetailsCard(ft.Container):
+    def __init__(self, rows: list[ft.Control]):
+        super().__init__(
+            content=ft.Column(controls=rows, spacing=0, tight=True),
+            bgcolor=ft.Colors.SURFACE,
+            border=ft.Border.all(color=ft.Colors.OUTLINE_VARIANT),
+            border_radius=14,
+            padding=ft.Padding.symmetric(horizontal=16, vertical=8),
+        )
+
+
+class NotificationCard(ft.Container):
+    def __init__(self, entry: dict, styles_map: dict):
+        notification_type = entry.get("type", "")
+        message = entry.get("message", "")
+        timestamp_raw = entry.get("timestamp", "")
+
+        notif_styles = styles_map.get(
+            notification_type,
+            {
+                "icon": ft.Icons.INFO_OUTLINED,
+                "color": ft.Colors.ON_SURFACE_VARIANT,
+            },
+        )
+
+        try:
+            dt = datetime.fromisoformat(timestamp_raw)
+            time_label = dt.strftime("%d.%m.%Y  %H:%M")
+        except (ValueError, TypeError):
+            time_label = ""
+
+        super().__init__(
+            content=ft.Row(
+                controls=[
+                    ft.Container(
+                        content=ft.Icon(
+                            notif_styles["icon"],
+                            color=notif_styles["color"],
+                            size=26,
+                        ),
+                        padding=ft.Padding.only(right=12),
+                        alignment=ft.Alignment.CENTER,
+                    ),
+                    ft.Column(
+                        controls=[
+                            ft.Text(
+                                message,
+                                size=14,
+                                weight=ft.FontWeight.W_500,
+                                color=ft.Colors.ON_SURFACE,
+                            ),
+                            ft.Text(
+                                time_label,
+                                size=11,
+                                color=ft.Colors.ON_SURFACE_VARIANT,
+                            ),
+                        ],
+                        spacing=2,
+                        tight=True,
+                        expand=True,
+                    ),
+                ],
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            ),
+            bgcolor=ft.Colors.SURFACE,
+            border=ft.Border.all(color=ft.Colors.OUTLINE_VARIANT),
+            border_radius=12,
+            padding=ft.Padding.symmetric(horizontal=16, vertical=12),
         )
