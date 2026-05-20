@@ -52,10 +52,10 @@ class CategoryPanel(ft.Column):
 
     def refresh_list(self, first: bool = False):
         with Session() as db:
-            cats = read_categories_by_user(db=db, user_id=self.user_id)
+            categories = read_categories_by_user(db=db, user_id=self.user_id)
 
-        if cats:
-            self.list_col.controls = [self.category_row(c) for c in cats]
+        if categories:
+            self.list_col.controls = [self.category_row(c) for c in categories]
         else:
             self.list_col.controls = [
                 ft.Container(
