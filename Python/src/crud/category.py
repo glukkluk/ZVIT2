@@ -26,7 +26,7 @@ def create_category(
 
 
 def read_categories_by_user(db: Session, user_id: int) -> list[Category]:
-    stmt = select(Category).filter_by(user_id=user_id).order_by(Category.name)
+    stmt = select(Category).filter_by(user_id=user_id)
     result = db.execute(stmt)
 
     return list(result.scalars().all())
