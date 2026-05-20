@@ -20,6 +20,7 @@ class NotificationTypes(Enum):
     REMINDER_ADDED = "reminder_added"
     REMINDER_EDITED = "reminder_edited"
     REMINDER_DELETED = "reminder_deleted"
+    REMINDER_FIRED = "reminder_fired"
     PROFILE_EDITED = "profile_edited"
 
 
@@ -37,7 +38,7 @@ NOTIFICATION_TYPE_MAP: dict[str, dict] = {
         "color": ft.Colors.ERROR,
     },
     NotificationTypes.CATEGORY_ADDED: {
-        "icon": ft.Icons.LABEL_OUTLINED,
+        "icon": ft.Icons.NEW_LABEL_OUTLINED,
         "color": ft.Colors.PRIMARY,
     },
     NotificationTypes.CATEGORY_EDITED: {
@@ -48,21 +49,13 @@ NOTIFICATION_TYPE_MAP: dict[str, dict] = {
         "icon": ft.Icons.LABEL_OFF_OUTLINED,
         "color": ft.Colors.ERROR,
     },
-    NotificationTypes.REMINDER_ADDED: {
-        "icon": ft.Icons.NOTIFICATION_ADD_OUTLINED,
-        "color": ft.Colors.PRIMARY,
-    },
-    NotificationTypes.REMINDER_EDITED: {
-        "icon": ft.Icons.EDIT_NOTIFICATIONS_OUTLINED,
-        "color": ft.Colors.TERTIARY,
-    },
-    NotificationTypes.REMINDER_DELETED: {
-        "icon": ft.Icons.NOTIFICATIONS_OFF_OUTLINED,
-        "color": ft.Colors.ERROR,
-    },
-    NotificationTypes.EVENT_EDITED: {
+    NotificationTypes.PROFILE_EDITED: {
         "icon": ft.Icons.MANAGE_ACCOUNTS_OUTLINED,
         "color": ft.Colors.SECONDARY,
+    },
+    NotificationTypes.REMINDER_FIRED: {
+        "icon": ft.Icons.NOTIFICATIONS_ACTIVE_OUTLINED,
+        "color": ft.Colors.TERTIARY,
     },
 }
 
@@ -122,13 +115,6 @@ class NotificationsView(BaseView):
             body=[header, self.list_col],
             body_kwargs={"scroll": ft.ScrollMode.HIDDEN},
         )
-
-    def get_entries(self) -> list:
-        if self._data is not None:
-            return self._data.get("activity_notifications") or []
-        if self.page:
-            return self.page.session.store.get("activity_notifications") or []
-        return []
 
     def build_list(self) -> list[ft.Control]:
         if not self.entries:

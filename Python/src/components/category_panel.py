@@ -119,6 +119,8 @@ class CategoryPanel(ft.Column):
 
     def open_add_dialog(self, e=None):
         def on_save(name: str, color: str, key: str):
+            from views.notifications import push_notification, NotificationTypes
+
             color_argb = to_hexa(color)
             with Session() as db:
                 existing = read_category_by_key(db=db, key=key, user_id=self.user_id)
@@ -130,12 +132,19 @@ class CategoryPanel(ft.Column):
                         color=color_argb,
                         user_id=self.user_id,
                     )
+                    push_notification(
+                        page=self.page,
+                        type=NotificationTypes.CATEGORY_ADDED,
+                        message=f"Додано категорію «{name}»",
+                    )
             self.refresh_list()
 
         self.page.show_dialog(NewCategoryAlert(func_on_dismiss=on_save))
 
     def open_edit_dialog(self, cat):
         def on_save(name: str, color: str, key: str):
+            from views.notifications import push_notification, NotificationTypes
+
             color_argb = to_hexa(color)
             with Session() as db:
                 update_category(
@@ -144,6 +153,11 @@ class CategoryPanel(ft.Column):
                     key=key,
                     name=name,
                     color=color_argb,
+                )
+                push_notification(
+                    page=self.page,
+                    type=NotificationTypes.CATEGORY_EDITED,
+                    message=f"Редаговано категорію «{name}»",
                 )
             self.refresh_list()
 
@@ -160,8 +174,17 @@ class CategoryPanel(ft.Column):
             self.page.pop_dialog()
 
         def do_delete(e):
+            from views.notifications import push_notification, NotificationTypes
+
+            cat_name = cat.name
             with Session() as db:
                 delete_category(db=db, category_id=cat.id)
+
+            push_notification(
+                page=self.page,
+                type=NotificationTypes.CATEGORY_DELETED,
+                message=f"Видалено категорію «{cat_name}»",
+            )
 
             cancel()
             self.refresh_list()

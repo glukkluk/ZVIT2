@@ -4,6 +4,7 @@ from components import BaseView
 from crud import read_event_by_id, delete_event
 from db import Session
 from utils import to_ahex, adjust_lightness
+from .notifications import push_notification, NotificationTypes
 
 
 MONTHS_UK = [
@@ -283,6 +284,12 @@ class EventDetailView(BaseView):
         async def do_delete(e):
             with Session() as db:
                 delete_event(db=db, event_id=self.event_id)
+
+            push_notification(
+                page=self.page,
+                type=NotificationTypes.EVENT_DELETED,
+                message=f"Видалено подію «{self.name}»",
+            )
 
             cancel()
 

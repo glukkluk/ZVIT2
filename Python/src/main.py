@@ -56,7 +56,7 @@ async def main(page: ft.Page):
                     page.views.append(CalendarView(data=page.session.store))
 
                 case "/notifications":
-                    page.views.append(NotificationsView())
+                    page.views.append(NotificationsView(data=page.session.store))
 
                 case "/reminder":
                     page.views.append(ReminderView(data=page.session.store))

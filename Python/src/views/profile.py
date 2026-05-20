@@ -5,6 +5,7 @@ from core.security import get_password_hash, verify_password
 from crud import read_user_by_id, update_user
 from logic import check_email, check_password
 from db import Session
+from .notifications import push_notification, NotificationTypes
 
 
 def avatar(email: str, size: float = 64) -> ft.Control:
@@ -307,6 +308,11 @@ class ProfileView(BaseView):
 
             if kwargs:
                 update_user(db=db, user_id=self.user_id, **kwargs)
+                push_notification(
+                    page=self.page,
+                    type=NotificationTypes.PROFILE_EDITED,
+                    message="Профіль успішно оновлено",
+                )
 
         if "email" in kwargs:
             self.email = new_email

@@ -8,6 +8,7 @@ from crud import read_events_by_user, has_fired, mark_fired
 from components import ReminderAlert
 from db import Session
 from views.reminder import REMINDER_MAP
+from views.notifications import push_notification, NotificationTypes
 
 
 TIMEZONE = ZoneInfo("Europe/Kiev")
@@ -22,6 +23,11 @@ def reminder_datetime(ev) -> datetime | None:
 
 
 def show_alert(page: ft.Page, ev_name: str, ev_id: int) -> None:
+    push_notification(
+        page=page,
+        type=NotificationTypes.REMINDER_FIRED,
+        message=f"Нагадування: {ev_name}",
+    )
     page.show_dialog(ReminderAlert(ev_name, ev_id))
     page.update()
 

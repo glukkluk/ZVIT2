@@ -12,6 +12,7 @@ from crud import (
 )
 from db import Session
 from utils import to_ahex
+from .notifications import push_notification, NotificationTypes
 
 
 DATETIME_ERROR_MESSAGES = [
@@ -277,6 +278,12 @@ class EditEventView(BaseView):
                 description=description,
                 category_id=category_id,
             )
+
+        push_notification(
+            page=self.page,
+            type=NotificationTypes.EVENT_EDITED,
+            message=f"Редаговано подію «{name}»",
+        )
 
         await self.go_back()
 

@@ -166,13 +166,7 @@ class NotificationCard(ft.Container):
         message = entry.get("message", "")
         timestamp_raw = entry.get("timestamp", "")
 
-        notif_styles = styles_map.get(
-            notification_type,
-            {
-                "icon": ft.Icons.INFO_OUTLINED,
-                "color": ft.Colors.ON_SURFACE_VARIANT,
-            },
-        )
+        notif_styles = styles_map.get(notification_type)
 
         try:
             dt = datetime.fromisoformat(timestamp_raw)
