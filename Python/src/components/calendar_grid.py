@@ -268,7 +268,7 @@ class CalendarGrid(ft.Column):
                         ),
                         border_radius=4,
                         bgcolor=to_ahex(adjust_lightness(to_hexa(color), 0.3)),
-                        padding=ft.Padding.symmetric(vertical=3, horizontal=5),
+                        padding=ft.Padding.symmetric(vertical=2, horizontal=5),
                         on_click=go_to_event_details(event_id=e_id),
                         on_hover=handle_badge_hover,
                     )

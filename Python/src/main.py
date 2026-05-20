@@ -19,7 +19,7 @@ from views import (
 
 
 async def main(page: ft.Page):
-    page.title = "Розумний розклад"
+    page.title = "ScheduleHub"
     page.theme_mode = ft.ThemeMode.LIGHT
 
     init_database()

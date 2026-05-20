@@ -44,6 +44,7 @@ class CategoryPanel(ft.Column):
                         scroll=ft.ScrollMode.AUTO,
                     ),
                     expand=True,
+                    padding=ft.Padding.only(top=4),
                 ),
             ],
         )
