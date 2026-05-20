@@ -48,9 +48,9 @@ class CategoryPanel(ft.Column):
             ],
         )
 
-        self.refresh_list()
+        self.refresh_list(first=True)
 
-    def refresh_list(self):
+    def refresh_list(self, first: bool = False):
         with Session() as db:
             cats = read_categories_by_user(db=db, user_id=self.user_id)
 
@@ -69,7 +69,9 @@ class CategoryPanel(ft.Column):
                     padding=ft.Padding.all(16),
                 )
             ]
-        self.update()
+
+        if not first:
+            self.update()
 
     def category_row(self, cat) -> ft.Control:
         color_display = to_ahex(cat.color)
