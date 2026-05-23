@@ -1,6 +1,3 @@
-/* ============================================================
-   CSS VARIABLES
-   ============================================================ */
 :root {
     --bg: #08080e;
     --surface: #101018;
@@ -47,9 +44,6 @@
     --shadow: 0 4px 20px rgba(80, 80, 140, 0.15);
 }
 
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
 *,
 *::before,
 *::after {
@@ -112,9 +106,6 @@ h3 {
     font-weight: 600;
 }
 
-/* ============================================================
-   LAYOUT
-   ============================================================ */
 .container {
     width: min(1200px, 100% - 2.5rem);
     margin-inline: auto;
@@ -125,9 +116,6 @@ aside {
     padding: var(--s6) 0;
 }
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
 .label {
     display: inline-flex;
     align-items: center;
@@ -166,9 +154,6 @@ aside {
     font-size: 1.05rem;
 }
 
-/* ============================================================
-   BUTTONS
-   ============================================================ */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -221,9 +206,6 @@ aside {
     justify-content: center;
 }
 
-/* ============================================================
-   LOGO
-   ============================================================ */
 .logo {
     display: inline-flex;
     align-items: center;
@@ -244,9 +226,6 @@ aside {
     color: #fff;
 }
 
-/* ============================================================
-   HEADER
-   ============================================================ */
 .header {
     position: sticky;
     top: 0;
@@ -345,7 +324,6 @@ aside {
     display: block;
 }
 
-/* Lucide icons — inherit color and size */
 [data-lucide] {
     color: inherit;
 }
@@ -371,7 +349,6 @@ svg.lucide {
     height: 20px;
 }
 
-/* Hamburger */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -406,7 +383,6 @@ svg.lucide {
     transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Nav Drawer */
 .nav-overlay {
     display: none;
     position: fixed;
@@ -478,9 +454,6 @@ svg.lucide {
     color: var(--accent);
 }
 
-/* ============================================================
-   SCROLL REVEAL
-   ============================================================ */
 .reveal {
     opacity: 0;
     transform: translateY(28px);
@@ -502,9 +475,6 @@ svg.lucide {
     transition-delay: 0.3s;
 }
 
-/* ============================================================
-   HERO
-   ============================================================ */
 .hero {
     min-height: 100dvh;
     display: flex;
@@ -641,7 +611,6 @@ svg.lucide {
     flex-shrink: 0;
 }
 
-/* Board mockup */
 .board-preview {
     width: 100%;
     max-width: 860px;
@@ -775,9 +744,6 @@ svg.lucide {
     background: #43e97b;
 }
 
-/* ============================================================
-   LOGOS
-   ============================================================ */
 .logos {
     padding: var(--s4) 0;
     border-top: 1px solid var(--border);
@@ -809,9 +775,6 @@ svg.lucide {
     color: var(--text-muted);
 }
 
-/* ============================================================
-   FEATURES
-   ============================================================ */
 .features {
     background: var(--surface);
 }
@@ -890,9 +853,6 @@ svg.lucide {
     font-size: 0.9rem;
 }
 
-/* ============================================================
-   HOW IT WORKS
-   ============================================================ */
 .steps {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -932,9 +892,6 @@ svg.lucide {
     font-size: 0.88rem;
 }
 
-/* ============================================================
-   REVIEWS (Swiper)
-   ============================================================ */
 .reviews {
     background: var(--surface);
 }
@@ -1003,9 +960,6 @@ svg.lucide {
     color: var(--text-muted);
 }
 
-/* ============================================================
-   PRICING
-   ============================================================ */
 .pricing__toggle {
     display: flex;
     align-items: center;
@@ -1189,9 +1143,6 @@ svg.lucide {
     color: var(--text-faint) !important;
 }
 
-/* ============================================================
-   CTA
-   ============================================================ */
 .cta__box {
     background: var(--surface);
     border: 1.5px solid var(--border);
@@ -1241,9 +1192,6 @@ svg.lucide {
     position: relative;
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
 .footer {
     background: var(--surface);
     border-top: 1px solid var(--border);
@@ -1306,32 +1254,20 @@ svg.lucide {
     gap: var(--s3);
 }
 
-/* ============================================================
-   MODAL
-   Fixed mobile: overlay scrolls, modal fits screen
-   ============================================================ */
 .modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.72);
     backdrop-filter: blur(6px);
     z-index: 2000;
-    /* scroll container on mobile */
     overflow-y: auto;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     padding: var(--s4) var(--s2);
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--transition);
-}
-
-/* Centre vertically when there's enough room */
-@media (min-height: 600px) {
-    .modal-overlay {
-        align-items: center;
-    }
 }
 
 .modal-overlay.is-open {
@@ -1386,9 +1322,6 @@ svg.lucide {
     outline: 2px solid var(--accent);
 }
 
-/* ============================================================
-   FORM
-   ============================================================ */
 .form {
     display: flex;
     flex-direction: column;
@@ -1458,9 +1391,6 @@ svg.lucide {
     font-weight: 500;
 }
 
-/* ============================================================
-   COOKIE BAR
-   ============================================================ */
 .cookie-bar {
     position: fixed;
     bottom: var(--s3);
@@ -1499,9 +1429,6 @@ svg.lucide {
     flex-shrink: 0;
 }
 
-/* ============================================================
-   GO TOP
-   ============================================================ */
 .go-top {
     position: fixed;
     bottom: var(--s3);
@@ -1534,9 +1461,6 @@ svg.lucide {
     outline-offset: 3px;
 }
 
-/* ============================================================
-   RESPONSIVE — 1024px
-   ============================================================ */
 @media (max-width: 1024px) {
     .features__grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1554,9 +1478,6 @@ svg.lucide {
     }
 }
 
-/* ============================================================
-   RESPONSIVE — 768px
-   ============================================================ */
 @media (max-width: 768px) {
     .header__nav {
         display: none;
@@ -1594,11 +1515,16 @@ svg.lucide {
     .board-preview__cols .board-col:not(:first-child) {
         display: none;
     }
+
+    .nav-drawer .btn {
+        font-size: 0.82rem;
+        padding: 0.7rem 1rem;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.3;
+    }
 }
 
-/* ============================================================
-   RESPONSIVE — 480px / 375px mobile
-   ============================================================ */
 @media (max-width: 480px) {
     :root {
         --s5: 2.5rem;
@@ -1645,7 +1571,6 @@ svg.lucide {
         line-height: 1.3;
     }
 
-    /* Modal: centered, comfortable on mobile */
     .modal-overlay {
         padding: var(--s3) var(--s2);
         align-items: center;
@@ -1666,7 +1591,6 @@ svg.lucide {
         text-align: center;
     }
 
-    /* Page buttons: centered text on mobile */
     .hero__actions .btn,
     .cta__actions .btn {
         text-align: center;

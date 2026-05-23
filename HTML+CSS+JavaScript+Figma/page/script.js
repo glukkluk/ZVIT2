@@ -1,8 +1,5 @@
 "use strict";
 
-/* ============================================================
-   THEME TOGGLE
-   ============================================================ */
 const html = document.documentElement;
 const themeBtn = document.getElementById("themeToggle");
 
@@ -17,9 +14,6 @@ themeBtn.addEventListener("click", () => {
     applyTheme(html.getAttribute("data-theme") === "dark" ? "light" : "dark");
 });
 
-/* ============================================================
-   STICKY HEADER
-   ============================================================ */
 const header = document.getElementById("header");
 
 window.addEventListener(
@@ -30,10 +24,6 @@ window.addEventListener(
     { passive: true },
 );
 
-/* ============================================================
-   GO TOP BUTTON
-   Show after scrolling past hero height (measured dynamically)
-   ============================================================ */
 const goTop = document.getElementById("goTop");
 const heroSection = document.getElementById("hero");
 
@@ -51,10 +41,6 @@ goTop.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-/* ============================================================
-   HAMBURGER / NAV DRAWER
-   Opens from the right side
-   ============================================================ */
 const hamburger = document.getElementById("hamburger");
 const navDrawer = document.getElementById("navDrawer");
 const navOverlay = document.getElementById("navOverlay");
@@ -82,7 +68,6 @@ hamburger.addEventListener("click", openDrawer);
 navClose.addEventListener("click", closeDrawer);
 navOverlay.addEventListener("click", closeDrawer);
 
-// Close on any drawer link click
 navDrawer
     .querySelectorAll(".nav-drawer__link, .js-modal-open")
     .forEach((el) => {
@@ -94,9 +79,6 @@ document.addEventListener("keydown", (e) => {
         closeDrawer();
 });
 
-/* ============================================================
-   MODAL WINDOW
-   ============================================================ */
 const modalOverlay = document.getElementById("modalOverlay");
 const modalClose = document.getElementById("modalClose");
 
@@ -111,7 +93,6 @@ function closeModal() {
     document.body.style.overflow = "";
 }
 
-// All triggers that open modal
 document.querySelectorAll(".js-modal-open").forEach((btn) => {
     btn.addEventListener("click", openModal);
 });
@@ -127,9 +108,6 @@ document.addEventListener("keydown", (e) => {
         closeModal();
 });
 
-/* ============================================================
-   FORM — email validation via regex, field-level feedback
-   ============================================================ */
 const signupForm = document.getElementById("signupForm");
 const formSuccess = document.getElementById("formSuccess");
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -148,7 +126,6 @@ function setField(groupId, valid, msg) {
     if (err && msg) err.textContent = msg;
 }
 
-// Real-time email feedback
 document.getElementById("email").addEventListener("blur", function () {
     if (!this.value) return;
     setField(
@@ -186,7 +163,6 @@ signupForm.addEventListener("submit", (e) => {
 
     if (!ok) return;
 
-    // Show success
     signupForm
         .querySelectorAll(".form__group, .btn--full")
         .forEach((el) => (el.style.display = "none"));
@@ -194,9 +170,6 @@ signupForm.addEventListener("submit", (e) => {
     setTimeout(closeModal, 2800);
 });
 
-/* ============================================================
-   PRICING TOGGLE — monthly / annual
-   ============================================================ */
 const billingToggle = document.getElementById("billingToggle");
 const lblMonthly = document.getElementById("lbl-monthly");
 const lblAnnual = document.getElementById("lbl-annual");
@@ -211,13 +184,8 @@ billingToggle.addEventListener("change", () => {
     });
 });
 
-// Set initial active label
 lblMonthly.classList.add("is-active");
 
-/* ============================================================
-   COOKIE BAR
-   Saved to localStorage — hides on revisit
-   ============================================================ */
 const cookieBar = document.getElementById("cookieBar");
 const cookieAccept = document.getElementById("cookieAccept");
 const cookieDecline = document.getElementById("cookieDecline");
@@ -234,10 +202,6 @@ function dismissCookie(choice) {
 cookieAccept.addEventListener("click", () => dismissCookie("accepted"));
 cookieDecline.addEventListener("click", () => dismissCookie("declined"));
 
-/* ============================================================
-   SCROLL REVEAL — pure IntersectionObserver, no library
-   Animations fire on first scroll into view
-   ============================================================ */
 const revealEls = document.querySelectorAll(".reveal");
 
 const revealObserver = new IntersectionObserver(
@@ -254,9 +218,6 @@ const revealObserver = new IntersectionObserver(
 
 revealEls.forEach((el) => revealObserver.observe(el));
 
-/* ============================================================
-   SWIPER SLIDER — testimonials
-   ============================================================ */
 new Swiper(".reviews__swiper", {
     loop: true,
     slidesPerView: 1,
@@ -273,10 +234,6 @@ new Swiper(".reviews__swiper", {
     },
 });
 
-/* ============================================================
-   COUNTDOWN TIMER
-   Target: 47 days from page load
-   ============================================================ */
 const eventDate = new Date();
 eventDate.setDate(eventDate.getDate() + 47);
 eventDate.setHours(10, 0, 0, 0);
@@ -309,9 +266,6 @@ function tickCountdown() {
 tickCountdown();
 setInterval(tickCountdown, 1000);
 
-/* ============================================================
-   HEADER CTA — show on desktop once scrolled past hero
-   ============================================================ */
 const headerCta = document.getElementById("headerCta");
 
 if (headerCta && window.innerWidth >= 768) {
