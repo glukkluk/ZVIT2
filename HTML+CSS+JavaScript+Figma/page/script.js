@@ -1,56 +1,45 @@
 "use strict";
 
 const html = document.documentElement;
-const themeBtn = document.getElementById("themeToggle");
+const themeBtn = document.querySelector("#themeToggle");
 
 function applyTheme(theme) {
     html.setAttribute("data-theme", theme);
-    localStorage.setItem("fd-theme", theme);
+    localStorage.setItem("theme", theme);
 }
 
-applyTheme(localStorage.getItem("fd-theme") || "dark");
+applyTheme(localStorage.getItem("theme") || "dark");
 
 themeBtn.addEventListener("click", () => {
     applyTheme(html.getAttribute("data-theme") === "dark" ? "light" : "dark");
 });
 
-const header = document.getElementById("header");
-
-window.addEventListener(
-    "scroll",
-    () => {
-        header.classList.toggle("header--scrolled", window.scrollY > 8);
-    },
-    { passive: true },
-);
-
-const goTop = document.getElementById("goTop");
-const heroSection = document.getElementById("hero");
+const goTop = document.querySelector("#goTop");
+const heroSection = document.querySelector("#hero");
 
 function updateGoTop() {
-    const threshold = heroSection
-        ? heroSection.offsetHeight
-        : window.innerHeight;
-    goTop.classList.toggle("is-visible", window.scrollY > threshold);
+    if (window.scrollY > heroSection.offsetHeight) {
+        goTop.classList.add("is-visible");
+    } else {
+        goTop.classList.remove("is-visible");
+    }
 }
 
-window.addEventListener("scroll", updateGoTop, { passive: true });
+window.addEventListener("scroll", updateGoTop);
 updateGoTop();
 
 goTop.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-const hamburger = document.getElementById("hamburger");
-const navDrawer = document.getElementById("navDrawer");
-const navOverlay = document.getElementById("navOverlay");
-const navClose = document.getElementById("navClose");
+const hamburger = document.querySelector("#hamburger");
+const navDrawer = document.querySelector("#navDrawer");
+const navOverlay = document.querySelector("#navOverlay");
+const navClose = document.querySelector("#navClose");
 
 function openDrawer() {
     navDrawer.classList.add("is-open");
     navOverlay.classList.add("is-active");
-    hamburger.classList.add("is-active");
-    hamburger.setAttribute("aria-expanded", "true");
     document.body.style.overflow = "hidden";
     navClose.focus();
 }
@@ -58,8 +47,6 @@ function openDrawer() {
 function closeDrawer() {
     navDrawer.classList.remove("is-open");
     navOverlay.classList.remove("is-active");
-    hamburger.classList.remove("is-active");
-    hamburger.setAttribute("aria-expanded", "false");
     document.body.style.overflow = "";
     hamburger.focus();
 }
@@ -74,18 +61,13 @@ navDrawer
         el.addEventListener("click", closeDrawer);
     });
 
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && navDrawer.classList.contains("is-open"))
-        closeDrawer();
-});
-
-const modalOverlay = document.getElementById("modalOverlay");
-const modalClose = document.getElementById("modalClose");
+const modalOverlay = document.querySelector("#modalOverlay");
+const modalClose = document.querySelector("#modalClose");
 
 function openModal() {
     modalOverlay.classList.add("is-open");
     document.body.style.overflow = "hidden";
-    setTimeout(() => modalClose.focus(), 60);
+    modalClose.focus();
 }
 
 function closeModal() {
@@ -104,16 +86,22 @@ modalOverlay.addEventListener("click", (e) => {
 });
 
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modalOverlay.classList.contains("is-open"))
+    if (e.key === "Escape" && navDrawer.classList.contains("is-open")) {
+        closeDrawer();
+    } else if (
+        e.key === "Escape" &&
+        modalOverlay.classList.contains("is-open")
+    ) {
         closeModal();
+    }
 });
 
-const signupForm = document.getElementById("signupForm");
-const formSuccess = document.getElementById("formSuccess");
+const signupForm = document.querySelector("#signupForm");
+const formSuccess = document.querySelector("#formSuccess");
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function setField(groupId, valid, msg) {
-    const group = document.getElementById(groupId);
+    const group = document.querySelector(`#${groupId}`);
     if (!group) return;
     const input = group.querySelector(".form__input, .form__textarea");
     const err = group.querySelector(".form__error");
@@ -126,7 +114,7 @@ function setField(groupId, valid, msg) {
     if (err && msg) err.textContent = msg;
 }
 
-document.getElementById("email").addEventListener("blur", function () {
+document.querySelector("#email").addEventListener("blur", function () {
     if (!this.value) return;
     setField(
         "fg-email",
@@ -170,9 +158,9 @@ signupForm.addEventListener("submit", (e) => {
     setTimeout(closeModal, 2800);
 });
 
-const billingToggle = document.getElementById("billingToggle");
-const lblMonthly = document.getElementById("lbl-monthly");
-const lblAnnual = document.getElementById("lbl-annual");
+const billingToggle = document.querySelector("#billingToggle");
+const lblMonthly = document.querySelector("#lbl-monthly");
+const lblAnnual = document.querySelector("#lbl-annual");
 
 billingToggle.addEventListener("change", () => {
     const annual = billingToggle.checked;
@@ -186,17 +174,17 @@ billingToggle.addEventListener("change", () => {
 
 lblMonthly.classList.add("is-active");
 
-const cookieBar = document.getElementById("cookieBar");
-const cookieAccept = document.getElementById("cookieAccept");
-const cookieDecline = document.getElementById("cookieDecline");
+const cookieBar = document.querySelector("#cookieBar");
+const cookieAccept = cookieBar.querySelector("#cookieAccept");
+const cookieDecline = cookieBar.querySelector("#cookieDecline");
 
-if (localStorage.getItem("fd-cookie")) {
+if (localStorage.getItem("cookies")) {
     cookieBar.classList.add("is-hidden");
 }
 
 function dismissCookie(choice) {
     cookieBar.classList.add("is-hidden");
-    localStorage.setItem("fd-cookie", choice);
+    localStorage.setItem("cookies", choice);
 }
 
 cookieAccept.addEventListener("click", () => dismissCookie("accepted"));
@@ -234,41 +222,9 @@ new Swiper(".reviews__swiper", {
     },
 });
 
-const eventDate = new Date();
-eventDate.setDate(eventDate.getDate() + 47);
-eventDate.setHours(10, 0, 0, 0);
-
-const cdDays = document.getElementById("cd-days");
-const cdHours = document.getElementById("cd-hours");
-const cdMins = document.getElementById("cd-mins");
-const cdSecs = document.getElementById("cd-secs");
-
-function pad(n) {
-    return String(n).padStart(2, "0");
-}
-
-function tickCountdown() {
-    const diff = eventDate - Date.now();
-
-    if (diff <= 0) {
-        [cdDays, cdHours, cdMins, cdSecs].forEach(
-            (el) => (el.textContent = "00"),
-        );
-        return;
-    }
-
-    cdDays.textContent = pad(Math.floor(diff / 86400000));
-    cdHours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
-    cdMins.textContent = pad(Math.floor((diff % 3600000) / 60000));
-    cdSecs.textContent = pad(Math.floor((diff % 60000) / 1000));
-}
-
-tickCountdown();
-setInterval(tickCountdown, 1000);
-
 const headerCta = document.getElementById("headerCta");
 
-if (headerCta && window.innerWidth >= 768) {
+if (headerCta && window.innerWidth < 890) {
     headerCta.style.display = "none";
     window.addEventListener(
         "scroll",

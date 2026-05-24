@@ -234,14 +234,11 @@ aside {
     background: var(--header-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid transparent;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
     transition:
         border-color var(--transition),
         box-shadow var(--transition);
-}
-.header--scrolled {
-    border-bottom-color: var(--border);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 .header__inner {
@@ -293,15 +290,18 @@ aside {
     gap: var(--s1);
 }
 
-.theme-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: var(--r-md);
+.action-btn {
+    width: 36px;
+    height: 36px;
+    color: var(--text-muted);
     border: 1.5px solid var(--border);
+    border-radius: var(--r-sm);
+    transition: all var(--transition);
+}
+
+.theme-btn {
     display: grid;
     place-items: center;
-    color: var(--text-muted);
-    transition: all var(--transition);
 }
 .theme-btn:hover {
     color: var(--accent);
@@ -335,15 +335,7 @@ svg.lucide {
     width: 22px;
     height: 22px;
 }
-.theme-btn svg.lucide {
-    width: 18px;
-    height: 18px;
-}
-.nav-drawer__close svg.lucide,
-.modal__close svg.lucide {
-    width: 18px;
-    height: 18px;
-}
+
 .go-top svg.lucide {
     width: 20px;
     height: 20px;
@@ -354,9 +346,6 @@ svg.lucide {
     flex-direction: column;
     gap: 5px;
     padding: 8px;
-    border-radius: var(--r-sm);
-    border: 1.5px solid var(--border);
-    transition: border-color var(--transition);
 }
 .hamburger:hover {
     border-color: var(--accent);
@@ -371,16 +360,6 @@ svg.lucide {
     background: var(--text);
     border-radius: 2px;
     transition: all var(--transition);
-}
-.hamburger.is-active span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-.hamburger.is-active span:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-}
-.hamburger.is-active span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
 }
 
 .nav-overlay {
@@ -399,8 +378,8 @@ svg.lucide {
     position: fixed;
     top: 0;
     right: 0;
+    bottom: 0;
     width: 260px;
-    height: 100dvh;
     background: var(--surface);
     border-left: 1px solid var(--border);
     z-index: 1000;
@@ -417,14 +396,8 @@ svg.lucide {
 
 .nav-drawer__close {
     align-self: flex-end;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--r-sm);
-    border: 1.5px solid var(--border);
     display: grid;
     place-items: center;
-    color: var(--text-muted);
-    transition: all var(--transition);
 }
 .nav-drawer__close:hover {
     color: var(--accent-2);
