@@ -15,18 +15,21 @@ themeBtn.addEventListener("click", () => {
 });
 
 const goTop = document.querySelector("#goTop");
+const headerCta = document.querySelector("#headerCta");
 const heroSection = document.querySelector("#hero");
 
-function updateGoTop() {
+function scrollActions() {
     if (window.scrollY > heroSection.offsetHeight) {
         goTop.classList.add("is-visible");
+        headerCta.classList.add("is-visible");
     } else {
         goTop.classList.remove("is-visible");
+        headerCta.classList.remove("is-visible");
     }
 }
 
-window.addEventListener("scroll", updateGoTop);
-updateGoTop();
+window.addEventListener("scroll", scrollActions);
+scrollActions();
 
 goTop.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -97,31 +100,24 @@ document.addEventListener("keydown", (e) => {
 });
 
 const signupForm = document.querySelector("#signupForm");
-const formSuccess = document.querySelector("#formSuccess");
+const formSuccess = signupForm.querySelector("#formSuccess");
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function setField(groupId, valid, msg) {
-    const group = document.querySelector(`#${groupId}`);
+    const group = signupForm.querySelector(`#${groupId}`);
     if (!group) return;
-    const input = group.querySelector(".form__input, .form__textarea");
+
+    const input = group.querySelector(".form__input");
     const err = group.querySelector(".form__error");
 
     group.classList.toggle("has-error", !valid);
+
     if (input) {
         input.classList.toggle("is-error", !valid);
         input.classList.toggle("is-valid", valid);
     }
     if (err && msg) err.textContent = msg;
 }
-
-document.querySelector("#email").addEventListener("blur", function () {
-    if (!this.value) return;
-    setField(
-        "fg-email",
-        EMAIL_RE.test(this.value.trim()),
-        "Введіть дійсну email-адресу.",
-    );
-});
 
 signupForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -155,7 +151,7 @@ signupForm.addEventListener("submit", (e) => {
         .querySelectorAll(".form__group, .btn--full")
         .forEach((el) => (el.style.display = "none"));
     formSuccess.removeAttribute("hidden");
-    setTimeout(closeModal, 2800);
+    setTimeout(closeModal, 3000);
 });
 
 const billingToggle = document.querySelector("#billingToggle");
@@ -221,20 +217,3 @@ new Swiper(".reviews__swiper", {
         nextSlideMessage: "Наступний відгук",
     },
 });
-
-const headerCta = document.getElementById("headerCta");
-
-if (headerCta && window.innerWidth < 890) {
-    headerCta.style.display = "none";
-    window.addEventListener(
-        "scroll",
-        () => {
-            const threshold = heroSection
-                ? heroSection.offsetHeight * 0.5
-                : 400;
-            headerCta.style.display =
-                window.scrollY > threshold ? "inline-flex" : "none";
-        },
-        { passive: true },
-    );
-}
