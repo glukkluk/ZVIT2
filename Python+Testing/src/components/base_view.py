@@ -17,26 +17,35 @@ class BaseView(ft.View):
         body_kwargs: dict[str, Any] = {},
         **kwargs,
     ):
+        gradient = kwargs.pop("gradient", None)
+
+        content = ft.SafeArea(
+            expand=True,
+            content=ft.Row(
+                expand=True,
+                controls=[
+                    ft.SelectionArea(content=self.RAIL),
+                    ft.VerticalDivider(width=1),
+                    ft.Column(
+                        alignment=ft.MainAxisAlignment.START,
+                        expand=True,
+                        controls=body,
+                        **body_kwargs,
+                    ),
+                ],
+            ),
+        )
+
+        if gradient:
+            content = ft.Container(
+                content=content,
+                expand=True,
+                gradient=gradient,
+            )
+
         super().__init__(
             route=route,
             appbar=self.APP_BAR,
-            controls=[
-                ft.SafeArea(
-                    expand=True,
-                    content=ft.Row(
-                        expand=True,
-                        controls=[
-                            ft.SelectionArea(content=self.RAIL),
-                            ft.VerticalDivider(width=1),
-                            ft.Column(
-                                alignment=ft.MainAxisAlignment.START,
-                                expand=True,
-                                controls=body,
-                                **body_kwargs,
-                            ),
-                        ],
-                    ),
-                )
-            ],
+            controls=[content],
             **kwargs,
         )

@@ -7,7 +7,7 @@ from models import Event
 from utils import adjust_lightness, to_ahex
 
 
-class EventCard(ft.Card):
+class EventCard(ft.Container):
     def __init__(self, event: Event, on_click=None):
         category = event.category
         hex_color = category.color if category else None
@@ -17,10 +17,10 @@ class EventCard(ft.Card):
         time_str = event.event_time.strftime("%H:%M")
         location_str = event.location
 
-        border_side = (
-            ft.BorderSide(width=3, color=color)
+        accent_border = (
+            ft.BorderSide(width=4, color=color)
             if hex_color
-            else ft.BorderSide(width=1, color=ft.Colors.OUTLINE)
+            else ft.BorderSide(width=0, color=ft.Colors.TRANSPARENT)
         )
 
         category_chip = None
@@ -32,15 +32,15 @@ class EventCard(ft.Card):
                         ft.Text(
                             value=category.name,
                             size=12,
-                            color=ft.Colors.ON_SURFACE_VARIANT,
+                            color=ft.Colors.GREY_600,
                         ),
                     ],
                     spacing=4,
                     tight=True,
                 ),
-                padding=ft.Padding.symmetric(horizontal=8, vertical=3),
-                border=ft.Border.all(color=to_ahex(adjust_lightness(hex_color, 0.1))),
-                border_radius=12,
+                padding=ft.Padding.symmetric(horizontal=10, vertical=4),
+                bgcolor=to_ahex(adjust_lightness(hex_color, 0.08)),
+                border_radius=10,
             )
 
         reminder_chip = None
@@ -58,19 +58,19 @@ class EventCard(ft.Card):
             reminder_chip = ft.Container(
                 content=ft.Row(
                     controls=[
-                        ft.Icon(icon=ft.Icons.CALENDAR_MONTH, size=10),
+                        ft.Icon(icon=ft.Icons.NOTIFICATIONS_OUTLINED, size=12, color=ft.Colors.INDIGO_500),
                         ft.Text(
                             value=reminder_text,
                             size=12,
-                            color=ft.Colors.ON_SURFACE_VARIANT,
+                            color=ft.Colors.INDIGO_600,
                         ),
                     ],
                     spacing=4,
                     tight=True,
                 ),
-                bgcolor=ft.Colors.PRIMARY_CONTAINER,
-                padding=ft.Padding.symmetric(horizontal=8, vertical=3),
-                border_radius=12,
+                bgcolor=ft.Colors.INDIGO_50,
+                padding=ft.Padding.symmetric(horizontal=10, vertical=4),
+                border_radius=10,
             )
 
         row_controls = [
@@ -79,20 +79,20 @@ class EventCard(ft.Card):
                     ft.Icon(
                         icon=ft.Icons.ACCESS_TIME,
                         size=14,
-                        color=ft.Colors.ON_SURFACE_VARIANT,
+                        color=ft.Colors.GREY_500,
                     ),
                     ft.Text(
-                        value=time_str, size=13, color=ft.Colors.ON_SURFACE_VARIANT
+                        value=time_str, size=13, color=ft.Colors.GREY_600
                     ),
                     ft.Icon(
                         icon=ft.Icons.LOCATION_ON_OUTLINED,
                         size=14,
-                        color=ft.Colors.ON_SURFACE_VARIANT,
+                        color=ft.Colors.GREY_500,
                     ),
                     ft.Text(
                         value=location_str,
                         size=13,
-                        color=ft.Colors.ON_SURFACE_VARIANT,
+                        color=ft.Colors.GREY_600,
                         overflow=ft.TextOverflow.ELLIPSIS,
                         expand=True,
                     ),
@@ -103,7 +103,7 @@ class EventCard(ft.Card):
 
         if category_chip and reminder_chip:
             row_controls.append(
-                ft.Row(controls=[category_chip, reminder_chip], spacing=20)
+                ft.Row(controls=[category_chip, reminder_chip], spacing=12)
             )
         elif category_chip:
             row_controls.append(category_chip)
@@ -115,37 +115,37 @@ class EventCard(ft.Card):
                 ft.Text(
                     value=event.description,
                     size=13,
-                    color=ft.Colors.ON_SURFACE_VARIANT,
+                    color=ft.Colors.GREY_500,
                     max_lines=2,
                     overflow=ft.TextOverflow.ELLIPSIS,
                 )
             )
 
-        content = ft.Container(
+        super().__init__(
             content=ft.Column(
                 controls=[
                     ft.Text(
                         value=event.name,
                         size=16,
                         weight=ft.FontWeight.W_600,
+                        color=ft.Colors.GREY_900,
                         overflow=ft.TextOverflow.ELLIPSIS,
                     ),
                     *row_controls,
                 ],
-                spacing=6,
+                spacing=8,
                 tight=True,
             ),
             padding=ft.Padding.all(16),
-            border=ft.Border(left=border_side),
-            border_radius=ft.BorderRadius.all(12),
+            border=ft.Border(left=accent_border),
+            border_radius=14,
+            bgcolor=ft.Colors.WHITE,
+            shadow=ft.BoxShadow(
+                blur_radius=10,
+                color=ft.Colors.with_opacity(0.08, "#000000"),
+                offset=ft.Offset(0, 3),
+            ),
             on_click=on_click,
-        )
-
-        super().__init__(
-            content=content,
-            shape=ft.RoundedRectangleBorder(radius=12),
-            shadow_color=hex_color,
-            clip_behavior=ft.ClipBehavior.ANTI_ALIAS,
         )
 
 
@@ -153,10 +153,14 @@ class DetailsCard(ft.Container):
     def __init__(self, rows: list[ft.Control]):
         super().__init__(
             content=ft.Column(controls=rows, spacing=0, tight=True),
-            bgcolor=ft.Colors.SURFACE,
-            border=ft.Border.all(color=ft.Colors.OUTLINE_VARIANT),
+            bgcolor=ft.Colors.WHITE,
             border_radius=14,
-            padding=ft.Padding.symmetric(horizontal=16, vertical=8),
+            padding=ft.Padding.symmetric(horizontal=16, vertical=10),
+            shadow=ft.BoxShadow(
+                blur_radius=10,
+                color=ft.Colors.with_opacity(0.08, "#000000"),
+                offset=ft.Offset(0, 3),
+            ),
         )
 
 
@@ -192,12 +196,12 @@ class NotificationCard(ft.Container):
                                 message,
                                 size=14,
                                 weight=ft.FontWeight.W_500,
-                                color=ft.Colors.ON_SURFACE,
+                                color=ft.Colors.GREY_900,
                             ),
                             ft.Text(
                                 time_label,
                                 size=11,
-                                color=ft.Colors.ON_SURFACE_VARIANT,
+                                color=ft.Colors.GREY_500,
                             ),
                         ],
                         spacing=2,
@@ -207,8 +211,12 @@ class NotificationCard(ft.Container):
                 ],
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            bgcolor=ft.Colors.SURFACE,
-            border=ft.Border.all(color=ft.Colors.OUTLINE_VARIANT),
-            border_radius=12,
+            bgcolor=ft.Colors.WHITE,
+            border_radius=14,
             padding=ft.Padding.symmetric(horizontal=16, vertical=12),
+            shadow=ft.BoxShadow(
+                blur_radius=10,
+                color=ft.Colors.with_opacity(0.08, "#000000"),
+                offset=ft.Offset(0, 3),
+            ),
         )

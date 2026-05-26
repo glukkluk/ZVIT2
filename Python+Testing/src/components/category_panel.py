@@ -19,15 +19,20 @@ class CategoryPanel(ft.Column):
 
         super().__init__(
             spacing=0,
-            expand=1,
             controls=[
                 ft.Container(
                     content=ft.Row(
                         controls=[
-                            ft.Text("Категорії", size=15, weight=ft.FontWeight.W_700),
+                            ft.Text(
+                                "Категорії",
+                                size=16,
+                                weight=ft.FontWeight.BOLD,
+                                color=ft.Colors.INDIGO_700,
+                            ),
                             ft.IconButton(
                                 icon=ft.Icons.ADD_CIRCLE_OUTLINE,
-                                icon_size=20,
+                                icon_size=22,
+                                icon_color=ft.Colors.INDIGO_500,
                                 tooltip="Додати категорію",
                                 on_click=self.open_add_dialog,
                             ),
@@ -35,16 +40,16 @@ class CategoryPanel(ft.Column):
                         alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                         vertical_alignment=ft.CrossAxisAlignment.CENTER,
                     ),
-                    padding=ft.Padding.only(left=4, right=4, top=8, bottom=4),
+                    padding=ft.Padding.only(left=4, right=4, top=4, bottom=8),
                 ),
-                ft.Divider(height=1),
+                ft.Divider(height=1, color=ft.Colors.GREY_200),
                 ft.Container(
                     content=ft.Column(
                         controls=[self.list_col],
                         scroll=ft.ScrollMode.AUTO,
                     ),
                     expand=True,
-                    padding=ft.Padding.only(top=4),
+                    padding=ft.Padding.only(top=8),
                 ),
             ],
         )
@@ -63,11 +68,11 @@ class CategoryPanel(ft.Column):
                     content=ft.Text(
                         "Немає категорій",
                         size=13,
-                        color=ft.Colors.OUTLINE,
+                        color=ft.Colors.GREY_400,
                         text_align=ft.TextAlign.CENTER,
                     ),
                     alignment=ft.Alignment.CENTER,
-                    padding=ft.Padding.all(16),
+                    padding=ft.Padding.all(24),
                 )
             ]
 
@@ -82,20 +87,23 @@ class CategoryPanel(ft.Column):
             content=ft.Row(
                 controls=[
                     ft.Container(
-                        width=14,
-                        height=14,
+                        width=12,
+                        height=12,
                         bgcolor=color_display,
-                        border_radius=7,
+                        border_radius=6,
                     ),
                     ft.Text(
                         cat.name,
                         size=13,
+                        color=ft.Colors.GREY_800,
+                        weight=ft.FontWeight.W_500,
                         expand=True,
                         overflow=ft.TextOverflow.ELLIPSIS,
                     ),
                     ft.IconButton(
                         icon=ft.Icons.EDIT_OUTLINED,
                         icon_size=16,
+                        icon_color=ft.Colors.GREY_500,
                         tooltip="Редагувати",
                         on_click=lambda e, c=cat: self.open_edit_dialog(c),
                         style=ft.ButtonStyle(padding=ft.Padding.all(4)),
@@ -103,18 +111,23 @@ class CategoryPanel(ft.Column):
                     ft.IconButton(
                         icon=ft.Icons.DELETE_OUTLINE,
                         icon_size=16,
-                        icon_color=ft.Colors.ERROR,
+                        icon_color=ft.Colors.RED_400,
                         tooltip="Видалити",
                         on_click=lambda e, c=cat: self.confirm_delete(c),
                         style=ft.ButtonStyle(padding=ft.Padding.all(4)),
                     ),
                 ],
-                spacing=6,
+                spacing=8,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            bgcolor=light,
-            border_radius=8,
-            padding=ft.Padding.symmetric(horizontal=10, vertical=6),
+            bgcolor=ft.Colors.WHITE,
+            border_radius=10,
+            padding=ft.Padding.symmetric(horizontal=12, vertical=8),
+            shadow=ft.BoxShadow(
+                blur_radius=6,
+                color=ft.Colors.with_opacity(0.06, "#000000"),
+                offset=ft.Offset(0, 2),
+            ),
         )
 
     def open_add_dialog(self, e=None):

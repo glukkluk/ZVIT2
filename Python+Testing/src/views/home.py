@@ -11,6 +11,22 @@ from db import Session
 TIMEZONE = ZoneInfo("Europe/Kiev")
 
 
+def card_wrapper(content: ft.Control, expand: bool | int | None = None) -> ft.Container:
+    return ft.Container(
+        content=content,
+        bgcolor=ft.Colors.WHITE,
+        border_radius=20,
+        padding=ft.Padding.symmetric(horizontal=20, vertical=16),
+        expand=expand,
+        shadow=ft.BoxShadow(
+            spread_radius=2,
+            blur_radius=20,
+            color=ft.Colors.with_opacity(0.12, "#000000"),
+            offset=ft.Offset(0, 6),
+        ),
+    )
+
+
 class HomeView(BaseView):
     def __init__(self, data):
         self.db_session = Session
@@ -19,7 +35,6 @@ class HomeView(BaseView):
         events_col = ft.Column(
             controls=self.build_events(),
             scroll=ft.ScrollMode.AUTO,
-            expand=2,
             alignment=ft.MainAxisAlignment.START,
         )
 
@@ -29,9 +44,9 @@ class HomeView(BaseView):
 
         body_row = ft.Row(
             controls=[
-                events_col,
-                ft.VerticalDivider(width=1),
-                cat_panel,
+                card_wrapper(events_col, expand=2),
+                ft.VerticalDivider(width=1, color=ft.Colors.with_opacity(0, "#000000")),
+                card_wrapper(cat_panel, expand=1),
             ],
             expand=True,
             vertical_alignment=ft.CrossAxisAlignment.START,
@@ -40,10 +55,23 @@ class HomeView(BaseView):
         super().__init__(
             route="/",
             body=[body_row],
+            gradient=ft.LinearGradient(
+                begin=ft.Alignment(0, -1),
+                end=ft.Alignment(0, 1),
+                colors=["#EEF2FF", "#E0E7FF", "#C7D2FE"],
+            ),
         )
 
         self.floating_action_button = ft.FloatingActionButton(
-            content="Створити", icon=ft.Icons.ADD, on_click=self.go_to_new_page
+            content=ft.Text(
+                "Створити", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD
+            ),
+            icon=ft.Icon(ft.Icons.ADD, color=ft.Colors.WHITE),
+            bgcolor=ft.Colors.with_opacity(0.9, "#4F46E5"),
+            shape=ft.RoundedRectangleBorder(radius=16),
+            height=48,
+            elevation=4,
+            on_click=self.go_to_new_page,
         )
 
     def build_events(self) -> list[ft.Control]:
@@ -59,19 +87,20 @@ class HomeView(BaseView):
                     controls=[
                         ft.Icon(
                             ft.Icons.EVENT_NOTE_OUTLINED,
-                            size=56,
-                            color=ft.Colors.OUTLINE,
+                            size=64,
+                            color=ft.Colors.INDIGO_300,
                         ),
                         ft.Text(
                             "Поки що немає активних подій",
-                            size=18,
-                            color=ft.Colors.ON_SURFACE_VARIANT,
+                            size=20,
+                            weight=ft.FontWeight.W_600,
+                            color=ft.Colors.INDIGO_600,
                             text_align=ft.TextAlign.CENTER,
                         ),
                         ft.Text(
                             "Натисніть «+», щоб створити першу подію",
-                            size=13,
-                            color=ft.Colors.OUTLINE,
+                            size=14,
+                            color=ft.Colors.GREY_500,
                             text_align=ft.TextAlign.CENTER,
                         ),
                     ],
@@ -80,7 +109,7 @@ class HomeView(BaseView):
                 ),
                 alignment=ft.Alignment.CENTER,
                 expand=True,
-                padding=ft.Padding.all(40),
+                padding=ft.Padding.all(60),
             )
         ]
 
@@ -103,26 +132,28 @@ class HomeView(BaseView):
             return no_events
 
         controls: list[ft.Control] = [
-            ft.Container(
-                content=ft.Text("Активні події", size=22, weight=ft.FontWeight.BOLD),
-                padding=ft.Padding.only(left=4, top=8, bottom=4),
-            )
+            ft.Text(
+                "Активні події",
+                size=22,
+                weight=ft.FontWeight.BOLD,
+                color=ft.Colors.INDIGO_700,
+            ),
+            ft.Container(height=4),
         ]
 
         for event_date in sorted(grouped.keys()):
             label = self.date_label(event_date, today.date())
 
             controls.append(
-                ft.Container(
-                    content=ft.Text(
-                        label,
-                        size=15,
-                        weight=ft.FontWeight.W_700,
-                        color=ft.Colors.ON_SURFACE,
-                    ),
-                    padding=ft.Padding.only(left=4, top=16, bottom=4),
+                ft.Text(
+                    label,
+                    size=15,
+                    weight=ft.FontWeight.W_700,
+                    color=ft.Colors.INDIGO_500,
                 )
             )
+
+            controls.append(ft.Container(height=4))
 
             for event in grouped[event_date]:
                 controls.append(
@@ -130,7 +161,7 @@ class HomeView(BaseView):
                         content=EventCard(
                             event, on_click=self.make_event_handler(event.id)
                         ),
-                        padding=ft.Padding.symmetric(horizontal=4, vertical=2),
+                        padding=ft.Padding.symmetric(vertical=4),
                     )
                 )
 
