@@ -4,15 +4,25 @@ import flet as ft
 class MainAppBar(ft.AppBar):
     def __init__(self):
         super().__init__(
-            leading=ft.Icon(ft.Icons.SCHEDULE_OUTLINED),
-            title=ft.Text("ScheduleHub"),
+            leading=ft.Icon(ft.Icons.SCHEDULE_OUTLINED, color=ft.Colors.INDIGO_600),
+            title=ft.Text(
+                "ScheduleHub",
+                color=ft.Colors.INDIGO_700,
+                weight=ft.FontWeight.BOLD,
+            ),
+            center_title=False,
+            bgcolor=ft.Colors.WHITE,
             actions=[
                 ft.IconButton(
                     icon=ft.Icons.DARK_MODE,
+                    icon_color=ft.Colors.BLACK_87,
+                    highlight_color=ft.Colors.INDIGO_50,
                     on_click=self.change_theme_mode,
                 ),
                 ft.IconButton(
                     icon=ft.Icons.ACCOUNT_CIRCLE_OUTLINED,
+                    icon_color=ft.Colors.BLACK_87,
+                    highlight_color=ft.Colors.INDIGO_50,
                     on_click=self.open_account_actions,
                 ),
             ],
