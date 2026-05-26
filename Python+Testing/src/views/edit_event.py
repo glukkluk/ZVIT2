@@ -66,6 +66,12 @@ class EditEventView(BaseView):
         self.event_name = ft.TextField(
             value=self.name,
             hint_text="Наприклад: зустріч із клієнтом",
+            prefix_icon=ft.Icons.EVENT_OUTLINED,
+            border=ft.InputBorder.OUTLINE,
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+            border_radius=12,
+            text_size=14,
             on_change=self.clear_error,
         )
 
@@ -78,20 +84,60 @@ class EditEventView(BaseView):
             on_change=self.handle_time_picker_change,
         )
 
-        self.select_date_button = ft.Button(
-            content=self.date.strftime("%d.%m.%Y"),
-            icon=ft.Icons.CALENDAR_MONTH,
+        self.select_date_button = ft.OutlinedButton(
+            content=ft.Row(
+                controls=[
+                    ft.Icon(
+                        ft.Icons.CALENDAR_MONTH, size=18, color=ft.Colors.INDIGO_500
+                    ),
+                    ft.Text(
+                        self.date.strftime("%d.%m.%Y"),
+                        color=ft.Colors.GREY_800,
+                        weight=ft.FontWeight.W_500,
+                    ),
+                ],
+                spacing=8,
+                tight=True,
+            ),
             on_click=self.show_date_picker,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=12),
+                side=ft.BorderSide(color=ft.Colors.GREY_300),
+                padding=15,
+            ),
+            expand=True,
         )
-        self.select_time_button = ft.Button(
-            content=self.time.strftime("%H:%M"),
-            icon=ft.Icons.ACCESS_TIME,
+        self.select_time_button = ft.OutlinedButton(
+            content=ft.Row(
+                controls=[
+                    ft.Icon(ft.Icons.ACCESS_TIME, size=18, color=ft.Colors.INDIGO_500),
+                    ft.Text(
+                        self.time.strftime("%H:%M"),
+                        color=ft.Colors.GREY_800,
+                        weight=ft.FontWeight.W_500,
+                    ),
+                ],
+                spacing=8,
+                tight=True,
+            ),
             on_click=self.show_time_picker,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=12),
+                side=ft.BorderSide(color=ft.Colors.GREY_300),
+                padding=15,
+            ),
+            expand=True,
         )
 
         self.location_input = ft.TextField(
             value=self.location,
             hint_text="Наприклад: міський парк",
+            prefix_icon=ft.Icons.LOCATION_ON_OUTLINED,
+            border=ft.InputBorder.OUTLINE,
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+            border_radius=12,
+            text_size=14,
             on_change=self.clear_error,
         )
 
@@ -115,6 +161,11 @@ class EditEventView(BaseView):
             value=self.category_key,
             options=dropdown_options,
             on_select=self.select_category,
+            border=ft.InputBorder.OUTLINE,
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+            border_radius=12,
+            text_size=14,
         )
 
         self.reminder_dropdown = ft.Dropdown(
@@ -135,6 +186,11 @@ class EditEventView(BaseView):
             ],
             menu_height=150,
             on_select=self.select_reminder_time,
+            border=ft.InputBorder.OUTLINE,
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+            border_radius=12,
+            text_size=14,
         )
 
         self.event_description = ft.TextField(
@@ -142,57 +198,187 @@ class EditEventView(BaseView):
             hint_text="Введіть деталі події...",
             multiline=True,
             min_lines=3,
+            border=ft.InputBorder.OUTLINE,
+            filled=True,
+            fill_color=ft.Colors.WHITE,
+            border_radius=12,
+            text_size=14,
         )
 
         self.datetime_error = ft.Text(
             value=DATETIME_ERROR_MESSAGES[0],
-            color=ft.Colors.ERROR,
-            size=12,
+            color=ft.Colors.RED_600,
+            size=13,
             visible=False,
+        )
+
+        cancel_button = ft.OutlinedButton(
+            content=ft.Text(
+                "Скасувати", color=ft.Colors.GREY_700, weight=ft.FontWeight.BOLD
+            ),
+            on_click=self.go_back,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=12),
+                side=ft.BorderSide(color=ft.Colors.GREY_300),
+                padding=ft.Padding.symmetric(horizontal=24, vertical=15),
+            ),
+            expand=True,
+        )
+
+        save_button = ft.Button(
+            content=ft.Row(
+                controls=[
+                    ft.Icon(icon=ft.Icons.CHECK, color=ft.Colors.WHITE, size=20),
+                    ft.Text(
+                        value="Зберегти",
+                        color=ft.Colors.WHITE,
+                        weight=ft.FontWeight.BOLD,
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                tight=True,
+            ),
+            on_click=self.save_event,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=12),
+                padding=ft.Padding.symmetric(horizontal=24, vertical=15),
+                bgcolor=ft.Colors.with_opacity(0.9, "#4F46E5"),
+                elevation=3,
+            ),
+            expand=True,
+        )
+
+        card = ft.Container(
+            content=ft.Column(
+                controls=[
+                    ft.Text(
+                        value="Редагування події",
+                        size=24,
+                        weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.INDIGO_700,
+                    ),
+                    ft.Text(
+                        value="Назва події *",
+                        size=14,
+                        weight=ft.FontWeight.W_600,
+                        color=ft.Colors.GREY_700,
+                    ),
+                    self.event_name,
+                    ft.Text(
+                        value="Дата та час *",
+                        size=14,
+                        weight=ft.FontWeight.W_600,
+                        color=ft.Colors.GREY_700,
+                    ),
+                    ft.Row(
+                        controls=[self.select_date_button, self.select_time_button],
+                        spacing=12,
+                    ),
+                    self.datetime_error,
+                    ft.Text(
+                        value="Місце проведення *",
+                        size=14,
+                        weight=ft.FontWeight.W_600,
+                        color=ft.Colors.GREY_700,
+                    ),
+                    self.location_input,
+                    ft.Text(
+                        value="Категорія",
+                        size=14,
+                        weight=ft.FontWeight.W_600,
+                        color=ft.Colors.GREY_700,
+                    ),
+                    self.category_dropdown,
+                    ft.Row(
+                        controls=[
+                            ft.Text(
+                                value="Нагадування",
+                                size=14,
+                                weight=ft.FontWeight.W_600,
+                                color=ft.Colors.GREY_700,
+                            ),
+                            self.reminder_dropdown,
+                        ],
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                        vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                    ),
+                    ft.Text(
+                        value="Опис",
+                        size=14,
+                        weight=ft.FontWeight.W_600,
+                        color=ft.Colors.GREY_700,
+                    ),
+                    self.event_description,
+                    ft.Container(height=8),
+                    ft.Row(controls=[cancel_button, save_button], spacing=12),
+                ],
+                horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
+                spacing=10,
+                tight=True,
+            ),
+            width=600,
+            padding=36,
+            border_radius=20,
+            bgcolor=ft.Colors.WHITE,
+            shadow=ft.BoxShadow(
+                spread_radius=2,
+                blur_radius=20,
+                color=ft.Colors.with_opacity(0.15, "#000000"),
+                offset=ft.Offset(0, 10),
+            ),
         )
 
         super().__init__(
             route=f"/edit/{event_id}",
             body=[
-                ft.Text(
-                    value="Редагування події", theme_style=ft.TextThemeStyle.TITLE_LARGE
-                ),
-                ft.Text(value="Назва події *"),
-                self.event_name,
-                ft.Text(value="Дата та час *"),
-                ft.Row(controls=[self.select_date_button, self.select_time_button]),
-                self.datetime_error,
-                ft.Text(value="Місце проведення *"),
-                self.location_input,
-                ft.Text(value="Категорія"),
-                self.category_dropdown,
-                ft.Row(
-                    controls=[
-                        ft.Text(value="Додати нагадування"),
-                        self.reminder_dropdown,
-                    ]
-                ),
-                ft.Text(value="Опис"),
-                self.event_description,
-                ft.Row(
-                    controls=[
-                        ft.Button("Скасувати", on_click=self.go_back),
-                        ft.FilledButton("Зберегти", on_click=self.save_event),
-                    ]
+                ft.Container(
+                    content=card,
+                    alignment=ft.Alignment(0, 0),
+                    expand=True,
                 ),
             ],
-            body_kwargs={"scroll": ft.ScrollMode.AUTO},
+            body_kwargs={
+                "scroll": ft.ScrollMode.AUTO,
+                "horizontal_alignment": ft.CrossAxisAlignment.CENTER,
+            },
+            gradient=ft.LinearGradient(
+                begin=ft.Alignment(0, -1),
+                end=ft.Alignment(0, 1),
+                colors=["#EEF2FF", "#E0E7FF", "#C7D2FE"],
+            ),
         )
 
     def handle_date_picker_change(self, e: ft.Event):
         self.date = e.control.value.astimezone(TIMEZONE).date()
-        self.select_date_button.content = self.date.strftime("%d.%m.%Y")
+        self.select_date_button.content = ft.Row(
+            controls=[
+                ft.Icon(ft.Icons.CALENDAR_MONTH, size=18, color=ft.Colors.INDIGO_500),
+                ft.Text(
+                    self.date.strftime("%d.%m.%Y"),
+                    color=ft.Colors.GREY_800,
+                    weight=ft.FontWeight.W_500,
+                ),
+            ],
+            spacing=8,
+            tight=True,
+        )
         self.datetime_error.visible = False
         self.page.update()
 
     def handle_time_picker_change(self, e: ft.Event):
         self.time = e.control.value
-        self.select_time_button.content = self.time.strftime("%H:%M")
+        self.select_time_button.content = ft.Row(
+            controls=[
+                ft.Icon(ft.Icons.ACCESS_TIME, size=18, color=ft.Colors.INDIGO_500),
+                ft.Text(
+                    self.time.strftime("%H:%M"),
+                    color=ft.Colors.GREY_800,
+                    weight=ft.FontWeight.W_500,
+                ),
+            ],
+            spacing=8,
+            tight=True,
+        )
         self.datetime_error.visible = False
         self.page.update()
 
@@ -209,8 +395,8 @@ class EditEventView(BaseView):
         self.reminder_time = e.data
 
     def clear_error(self, e: ft.Event):
-        if e.control.error:
-            e.control.error = None
+        if e.control.error_text:
+            e.control.error_text = ""
             self.page.update()
 
     def validate(self) -> bool:
@@ -218,10 +404,10 @@ class EditEventView(BaseView):
 
         name = (self.event_name.value or "").strip()
         if not name:
-            self.event_name.error = "Введіть назву події"
+            self.event_name.error_text = "Введіть назву події"
             has_error = True
         else:
-            self.event_name.error = None
+            self.event_name.error_text = ""
 
         if not self.date or not self.time:
             self.datetime_error.value = DATETIME_ERROR_MESSAGES[0]
@@ -232,10 +418,10 @@ class EditEventView(BaseView):
 
         location = (self.location_input.value or "").strip()
         if not location:
-            self.location_input.error = "Введіть місце проведення"
+            self.location_input.error_text = "Введіть місце проведення"
             has_error = True
         else:
-            self.location_input.error = None
+            self.location_input.error_text = ""
 
         if not self.user_id:
             has_error = True
