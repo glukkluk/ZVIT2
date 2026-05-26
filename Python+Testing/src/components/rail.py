@@ -9,26 +9,52 @@ class MainRail(ft.NavigationRail):
             selected_index=index,
             extended=True,
             min_extended_width=200,
+            bgcolor=ft.Colors.WHITE,
+            indicator_shape=ft.RoundedRectangleBorder(radius=12),
+            indicator_color=ft.Colors.INDIGO_50,
+            selected_label_text_style=ft.TextStyle(
+                color=ft.Colors.INDIGO_700,
+                weight=ft.FontWeight.BOLD,
+                size=14,
+            ),
+            unselected_label_text_style=ft.TextStyle(
+                color=ft.Colors.GREY_600,
+                size=14,
+            ),
             on_change=self.go_to_page,
             destinations=[
                 ft.NavigationRailDestination(
-                    icon=ft.Icons.HOME_OUTLINED,
-                    selected_icon=ft.Icons.HOME,
+                    icon=ft.Icon(icon=ft.Icons.HOME_OUTLINED, color=ft.Colors.GREY_600),
+                    selected_icon=ft.Icon(
+                        icon=ft.Icons.HOME, color=ft.Colors.INDIGO_600
+                    ),
                     label=ft.Text("Головна"),
                 ),
                 ft.NavigationRailDestination(
-                    icon=ft.Icons.CALENDAR_MONTH_OUTLINED,
-                    selected_icon=ft.Icons.CALENDAR_MONTH,
+                    icon=ft.Icon(
+                        icon=ft.Icons.CALENDAR_MONTH_OUTLINED, color=ft.Colors.GREY_600
+                    ),
+                    selected_icon=ft.Icon(
+                        icon=ft.Icons.CALENDAR_MONTH, color=ft.Colors.INDIGO_600
+                    ),
                     label=ft.Text("Календар"),
                 ),
                 ft.NavigationRailDestination(
-                    icon=ft.Icons.NOTIFICATIONS_OUTLINED,
-                    selected_icon=ft.Icons.NOTIFICATIONS,
+                    icon=ft.Icon(
+                        icon=ft.Icons.NOTIFICATIONS_OUTLINED, color=ft.Colors.GREY_600
+                    ),
+                    selected_icon=ft.Icon(
+                        icon=ft.Icons.NOTIFICATIONS, color=ft.Colors.INDIGO_600
+                    ),
                     label=ft.Text("Нагадування"),
                 ),
                 ft.NavigationRailDestination(
-                    icon=ft.Icons.MESSAGE_OUTLINED,
-                    selected_icon=ft.Icons.MESSAGE,
+                    icon=ft.Icon(
+                        icon=ft.Icons.MESSAGE_OUTLINED, color=ft.Colors.GREY_600
+                    ),
+                    selected_icon=ft.Icon(
+                        icon=ft.Icons.MESSAGE, color=ft.Colors.INDIGO_600
+                    ),
                     label=ft.Text("Повідомлення"),
                 ),
             ],
