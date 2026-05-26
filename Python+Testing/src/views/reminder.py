@@ -65,21 +65,13 @@ def reminder_datetime(e) -> datetime | None:
 def reminder_status(reminder_dt: datetime, event_dt: datetime) -> tuple[str, str, str]:
     now = datetime.now(TIMEZONE)
     if now >= event_dt:
-        return (
-            "Завершено",
-            ft.Colors.SURFACE_CONTAINER_HIGHEST,
-            ft.Colors.ON_SURFACE_VARIANT,
-        )
+        return "Завершено", ft.Colors.GREY_100, ft.Colors.GREY_600
     elif now >= reminder_dt:
-        return "Зараз!", ft.Colors.ERROR_CONTAINER, ft.Colors.ON_ERROR_CONTAINER
+        return "Зараз!", ft.Colors.INDIGO_100, ft.Colors.INDIGO_700
     elif (reminder_dt - now) <= timedelta(hours=1):
-        return "Скоро", ft.Colors.TERTIARY_CONTAINER, ft.Colors.ON_TERTIARY_CONTAINER
+        return "Скоро", ft.Colors.AMBER_50, ft.Colors.AMBER_800
     else:
-        return (
-            "Майбутнє",
-            ft.Colors.SECONDARY_CONTAINER,
-            ft.Colors.ON_SECONDARY_CONTAINER,
-        )
+        return "Майбутнє", ft.Colors.GREEN_50, ft.Colors.GREEN_700
 
 
 def reminder_card(ev, on_click) -> ft.Control:
@@ -95,8 +87,8 @@ def reminder_card(ev, on_click) -> ft.Control:
             status_label, size=11, weight=ft.FontWeight.W_600, color=status_fg
         ),
         bgcolor=status_bg,
-        padding=ft.Padding.symmetric(horizontal=8, vertical=3),
-        border_radius=20,
+        padding=ft.Padding.symmetric(horizontal=10, vertical=4),
+        border_radius=8,
     )
 
     cat_chip = (
@@ -115,9 +107,8 @@ def reminder_card(ev, on_click) -> ft.Control:
                 tight=True,
             ),
             bgcolor=light,
-            padding=ft.Padding.symmetric(horizontal=7, vertical=3),
-            border_radius=20,
-            border=ft.Border.all(color=cat_color),
+            padding=ft.Padding.symmetric(horizontal=8, vertical=3),
+            border_radius=8,
         )
         if ev.category
         else ft.Container()
@@ -134,6 +125,7 @@ def reminder_card(ev, on_click) -> ft.Control:
                     ev.name,
                     size=16,
                     weight=ft.FontWeight.W_600,
+                    color=ft.Colors.GREY_900,
                     overflow=ft.TextOverflow.ELLIPSIS,
                 ),
                 ft.Row(
@@ -141,25 +133,31 @@ def reminder_card(ev, on_click) -> ft.Control:
                         ft.Icon(
                             ft.Icons.NOTIFICATIONS_OUTLINED,
                             size=14,
-                            color=cat_color or ft.Colors.ON_SURFACE_VARIANT,
+                            color=cat_color or ft.Colors.GREY_500,
                         ),
                         ft.Text(
                             reminder_dt.strftime("%d.%m.%Y  %H:%M"),
                             size=13,
                             weight=ft.FontWeight.W_500,
-                            color=ft.Colors.ON_SURFACE,
+                            color=ft.Colors.GREY_700,
                         ),
                     ],
                     spacing=5,
                     tight=True,
                 ),
             ],
-            spacing=6,
+            spacing=8,
             tight=True,
         ),
-        padding=ft.Padding.all(14),
-        border=ft.Border(left=ft.BorderSide(3, cat_color or ft.Colors.OUTLINE_VARIANT)),
-        border_radius=12,
+        padding=ft.Padding.all(16),
+        border=ft.Border(left=ft.BorderSide(4, cat_color or ft.Colors.INDIGO_300)),
+        border_radius=14,
+        bgcolor=ft.Colors.WHITE,
+        shadow=ft.BoxShadow(
+            blur_radius=10,
+            color=ft.Colors.with_opacity(0.08, "#000000"),
+            offset=ft.Offset(0, 3),
+        ),
         on_click=on_click if on_click else None,
     )
 
@@ -174,7 +172,15 @@ class ReminderView(BaseView):
         super().__init__(
             route="/reminder",
             body=self.build_controls(),
-            body_kwargs={"scroll": ft.ScrollMode.AUTO},
+            body_kwargs={
+                "scroll": ft.ScrollMode.AUTO,
+                "horizontal_alignment": ft.CrossAxisAlignment.CENTER,
+            },
+            gradient=ft.LinearGradient(
+                begin=ft.Alignment(0, -1),
+                end=ft.Alignment(0, 1),
+                colors=["#EEF2FF", "#E0E7FF", "#C7D2FE"],
+            ),
         )
 
     def build_controls(self) -> list[ft.Control]:
@@ -204,10 +210,13 @@ class ReminderView(BaseView):
             return [self.empty_state()]
 
         controls: list[ft.Control] = [
-            ft.Container(
-                content=ft.Text("Нагадування", size=22, weight=ft.FontWeight.BOLD),
-                padding=ft.Padding.only(left=4, top=4, bottom=8),
-            )
+            ft.Text(
+                "Нагадування",
+                size=22,
+                weight=ft.FontWeight.BOLD,
+                color=ft.Colors.INDIGO_700,
+            ),
+            ft.Container(height=4),
         ]
 
         if upcoming:
@@ -222,13 +231,34 @@ class ReminderView(BaseView):
             for ev in past:
                 controls.append(self.card_container(ev))
 
-        return controls
+        content_col = ft.Column(controls=controls, spacing=8, tight=True, expand=True)
+
+        card = ft.Container(
+            content=content_col,
+            width=600,
+            padding=ft.Padding.symmetric(horizontal=24, vertical=20),
+            border_radius=20,
+            bgcolor=ft.Colors.WHITE,
+            shadow=ft.BoxShadow(
+                spread_radius=2,
+                blur_radius=20,
+                color=ft.Colors.with_opacity(0.12, "#000000"),
+                offset=ft.Offset(0, 6),
+            ),
+        )
+
+        return [
+            ft.Container(
+                content=card,
+                alignment=ft.Alignment(0, 0),
+                expand=True,
+            ),
+        ]
 
     def card_container(self, e) -> ft.Control:
-
         return ft.Container(
             content=reminder_card(e, on_click=self.make_event_handler(e.id)),
-            padding=ft.Padding.symmetric(horizontal=4, vertical=3),
+            padding=ft.Padding.symmetric(vertical=4),
         )
 
     def make_event_handler(self, event_id: int):
@@ -243,40 +273,41 @@ class ReminderView(BaseView):
         return ft.Container(
             content=ft.Row(
                 controls=[
-                    ft.Icon(icon, size=16, color=ft.Colors.ON_SURFACE_VARIANT),
+                    ft.Icon(icon, size=18, color=ft.Colors.INDIGO_500),
                     ft.Text(
                         title,
-                        size=13,
+                        size=15,
                         weight=ft.FontWeight.W_700,
-                        color=ft.Colors.ON_SURFACE_VARIANT,
+                        color=ft.Colors.INDIGO_700,
                     ),
                 ],
                 spacing=6,
                 tight=True,
             ),
-            padding=ft.Padding.only(left=4, top=16, bottom=4),
+            padding=ft.Padding.only(top=12, bottom=4),
         )
 
     @staticmethod
     def empty_state() -> ft.Control:
-        return ft.Container(
+        inner = ft.Container(
             content=ft.Column(
                 controls=[
                     ft.Icon(
                         ft.Icons.NOTIFICATIONS_OFF_OUTLINED,
-                        size=56,
-                        color=ft.Colors.OUTLINE,
+                        size=64,
+                        color=ft.Colors.INDIGO_300,
                     ),
                     ft.Text(
                         "Немає нагадувань",
-                        size=18,
-                        color=ft.Colors.ON_SURFACE_VARIANT,
+                        size=20,
+                        weight=ft.FontWeight.W_600,
+                        color=ft.Colors.INDIGO_600,
                         text_align=ft.TextAlign.CENTER,
                     ),
                     ft.Text(
                         "Додайте нагадування до подій, щоб не пропустити важливе",
-                        size=13,
-                        color=ft.Colors.OUTLINE,
+                        size=14,
+                        color=ft.Colors.GREY_500,
                         text_align=ft.TextAlign.CENTER,
                     ),
                 ],
@@ -285,5 +316,24 @@ class ReminderView(BaseView):
             ),
             alignment=ft.Alignment.CENTER,
             expand=True,
-            padding=ft.Padding.all(40),
+            padding=ft.Padding.all(60),
+        )
+
+        card = ft.Container(
+            content=inner,
+            width=600,
+            border_radius=20,
+            bgcolor=ft.Colors.WHITE,
+            shadow=ft.BoxShadow(
+                spread_radius=2,
+                blur_radius=20,
+                color=ft.Colors.with_opacity(0.12, "#000000"),
+                offset=ft.Offset(0, 6),
+            ),
+        )
+
+        return ft.Container(
+            content=card,
+            alignment=ft.Alignment(0, 0),
+            expand=True,
         )
