@@ -32,14 +32,14 @@ class EventCard(ft.Container):
                         ft.Text(
                             value=category.name,
                             size=12,
-                            color=ft.Colors.GREY_600,
+                            color=ft.Colors.GREY_900,
                         ),
                     ],
                     spacing=4,
                     tight=True,
                 ),
                 padding=ft.Padding.symmetric(horizontal=10, vertical=4),
-                bgcolor=to_ahex(adjust_lightness(hex_color, 0.08)),
+                bgcolor=to_ahex(adjust_lightness(hex_color, 0.25)),
                 border_radius=10,
             )
 
@@ -58,7 +58,11 @@ class EventCard(ft.Container):
             reminder_chip = ft.Container(
                 content=ft.Row(
                     controls=[
-                        ft.Icon(icon=ft.Icons.NOTIFICATIONS_OUTLINED, size=12, color=ft.Colors.INDIGO_500),
+                        ft.Icon(
+                            icon=ft.Icons.NOTIFICATIONS_OUTLINED,
+                            size=12,
+                            color=ft.Colors.INDIGO_500,
+                        ),
                         ft.Text(
                             value=reminder_text,
                             size=12,
@@ -79,20 +83,18 @@ class EventCard(ft.Container):
                     ft.Icon(
                         icon=ft.Icons.ACCESS_TIME,
                         size=14,
-                        color=ft.Colors.GREY_500,
+                        color=ft.Colors.BLACK_87,
                     ),
-                    ft.Text(
-                        value=time_str, size=13, color=ft.Colors.GREY_600
-                    ),
+                    ft.Text(value=time_str, size=13, color=ft.Colors.BLACK_87),
                     ft.Icon(
                         icon=ft.Icons.LOCATION_ON_OUTLINED,
                         size=14,
-                        color=ft.Colors.GREY_500,
+                        color=ft.Colors.BLACK_87,
                     ),
                     ft.Text(
                         value=location_str,
                         size=13,
-                        color=ft.Colors.GREY_600,
+                        color=ft.Colors.BLACK_87,
                         overflow=ft.TextOverflow.ELLIPSIS,
                         expand=True,
                     ),
@@ -115,7 +117,7 @@ class EventCard(ft.Container):
                 ft.Text(
                     value=event.description,
                     size=13,
-                    color=ft.Colors.GREY_500,
+                    color=ft.Colors.BLACK_87,
                     max_lines=2,
                     overflow=ft.TextOverflow.ELLIPSIS,
                 )
