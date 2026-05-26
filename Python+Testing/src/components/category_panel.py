@@ -15,7 +15,7 @@ from utils import to_ahex, to_hexa, adjust_lightness
 class CategoryPanel(ft.Column):
     def __init__(self, user_id: int):
         self.user_id = user_id
-        self.list_col = ft.Column(spacing=4, tight=True)
+        self.list_col = ft.Column(spacing=8, tight=True)
 
         super().__init__(
             spacing=0,
@@ -103,7 +103,7 @@ class CategoryPanel(ft.Column):
                     ft.IconButton(
                         icon=ft.Icons.EDIT_OUTLINED,
                         icon_size=16,
-                        icon_color=ft.Colors.GREY_500,
+                        icon_color=ft.Colors.GREY_800,
                         tooltip="Редагувати",
                         on_click=lambda e, c=cat: self.open_edit_dialog(c),
                         style=ft.ButtonStyle(padding=ft.Padding.all(4)),
@@ -121,6 +121,7 @@ class CategoryPanel(ft.Column):
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             ),
             bgcolor=ft.Colors.WHITE,
+            border=ft.Border.all(color=light),
             border_radius=10,
             padding=ft.Padding.symmetric(horizontal=12, vertical=8),
             shadow=ft.BoxShadow(
