@@ -35,7 +35,7 @@ class CalendarGrid(ft.Column):
 
         self.events_by_date: dict[date, dict[str, list[str]]] = {}
         for e in events:
-            color = to_ahex(e.category.color) if e.category else "#808080"
+            color = to_ahex(e.category.color) if e.category else "#ff7986cb"
             self.events_by_date.setdefault(
                 e.event_date, {"ids": [], "titles": [], "colors": []}
             )
@@ -90,21 +90,32 @@ class CalendarGrid(ft.Column):
                 ft.IconButton(
                     ft.Icons.CHEVRON_LEFT,
                     on_click=prev_month,
-                    icon_size=18,
+                    icon_size=20,
+                    icon_color=ft.Colors.INDIGO_500,
                     tooltip="Попередній місяць",
+                    style=ft.ButtonStyle(
+                        shape=ft.RoundedRectangleBorder(radius=8),
+                        padding=ft.Padding.all(6),
+                    ),
                 ),
                 ft.Text(
                     month_name,
-                    size=15,
-                    weight=ft.FontWeight.W_600,
-                    width=100,
+                    size=16,
+                    weight=ft.FontWeight.W_700,
+                    color=ft.Colors.INDIGO_700,
+                    width=110,
                     text_align=ft.TextAlign.CENTER,
                 ),
                 ft.IconButton(
                     ft.Icons.CHEVRON_RIGHT,
                     on_click=next_month,
-                    icon_size=18,
+                    icon_size=20,
+                    icon_color=ft.Colors.INDIGO_500,
                     tooltip="Наступний місяць",
+                    style=ft.ButtonStyle(
+                        shape=ft.RoundedRectangleBorder(radius=8),
+                        padding=ft.Padding.all(6),
+                    ),
                 ),
             ],
             spacing=0,
@@ -117,21 +128,32 @@ class CalendarGrid(ft.Column):
                 ft.IconButton(
                     ft.Icons.CHEVRON_LEFT,
                     on_click=prev_year,
-                    icon_size=18,
+                    icon_size=20,
+                    icon_color=ft.Colors.INDIGO_500,
                     tooltip="Попередній рік",
+                    style=ft.ButtonStyle(
+                        shape=ft.RoundedRectangleBorder(radius=8),
+                        padding=ft.Padding.all(6),
+                    ),
                 ),
                 ft.Text(
                     str(self.year),
-                    size=15,
-                    weight=ft.FontWeight.W_600,
-                    width=50,
+                    size=16,
+                    weight=ft.FontWeight.W_700,
+                    color=ft.Colors.INDIGO_700,
+                    width=55,
                     text_align=ft.TextAlign.CENTER,
                 ),
                 ft.IconButton(
                     ft.Icons.CHEVRON_RIGHT,
                     on_click=next_year,
-                    icon_size=18,
+                    icon_size=20,
+                    icon_color=ft.Colors.INDIGO_500,
                     tooltip="Наступний рік",
+                    style=ft.ButtonStyle(
+                        shape=ft.RoundedRectangleBorder(radius=8),
+                        padding=ft.Padding.all(6),
+                    ),
                 ),
             ],
             spacing=0,
@@ -142,13 +164,19 @@ class CalendarGrid(ft.Column):
         return ft.Container(
             content=ft.Row(
                 controls=[
-                    ft.Text("Календар", size=22, weight=ft.FontWeight.BOLD),
-                    ft.Row(controls=[month_nav, year_nav], spacing=8, tight=True),
+                    ft.Text(
+                        "Календар",
+                        size=22,
+                        weight=ft.FontWeight.BOLD,
+                        color=ft.Colors.INDIGO_700,
+                    ),
+                    ft.Row(controls=[month_nav, year_nav], spacing=12, tight=True),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-            padding=ft.Padding.symmetric(horizontal=16, vertical=12),
+            padding=ft.Padding.symmetric(horizontal=8, vertical=12),
+            border=ft.Border.only(bottom=ft.BorderSide(1, ft.Colors.GREY_200)),
         )
 
     def build_weekday_row(self) -> ft.Control:
@@ -160,20 +188,20 @@ class CalendarGrid(ft.Column):
                     content=ft.Text(
                         label,
                         size=12,
-                        weight=ft.FontWeight.W_600,
-                        color=ft.Colors.ERROR
+                        weight=ft.FontWeight.W_700,
+                        color=ft.Colors.INDIGO_400
                         if is_weekend
-                        else ft.Colors.ON_SURFACE_VARIANT,
+                        else ft.Colors.GREY_500,
                         text_align=ft.TextAlign.CENTER,
                     ),
                     expand=True,
                     alignment=ft.Alignment.CENTER,
-                    padding=ft.Padding.symmetric(vertical=6),
+                    padding=ft.Padding.symmetric(vertical=8),
                 )
             )
         return ft.Container(
             content=ft.Row(controls=cells, spacing=0),
-            border=ft.Border.only(bottom=ft.BorderSide(1, ft.Colors.OUTLINE_VARIANT)),
+            border=ft.Border.only(bottom=ft.BorderSide(1, ft.Colors.GREY_200)),
         )
 
     def build_day_rows(self) -> list[ft.Control]:
@@ -189,9 +217,7 @@ class CalendarGrid(ft.Column):
                         spacing=0,
                         expand=True,
                     ),
-                    border=ft.Border.only(
-                        bottom=ft.BorderSide(1, ft.Colors.OUTLINE_VARIANT)
-                    ),
+                    border=ft.Border.only(bottom=ft.BorderSide(1, ft.Colors.GREY_100)),
                     expand=True,
                 )
             )
@@ -203,15 +229,13 @@ class CalendarGrid(ft.Column):
         is_weekend = d.weekday() >= 5
 
         if is_today:
-            num_color = ft.Colors.ON_PRIMARY
+            num_color = ft.Colors.WHITE
         elif not in_month:
-            num_color = ft.Colors.OUTLINE
+            num_color = ft.Colors.GREY_300
         elif is_weekend:
-            num_color = ft.Colors.ERROR
-        elif is_today:
-            num_color = ft.Colors.ON_PRIMARY
+            num_color = ft.Colors.INDIGO_400
         else:
-            num_color = ft.Colors.ON_SURFACE
+            num_color = ft.Colors.GREY_800
 
         day_label: ft.Control
         if is_today:
@@ -219,8 +243,8 @@ class CalendarGrid(ft.Column):
                 content=ft.Text(
                     str(d.day), size=13, weight=ft.FontWeight.W_700, color=num_color
                 ),
-                bgcolor=ft.Colors.PRIMARY,
-                border_radius=20,
+                bgcolor=ft.Colors.INDIGO_600,
+                border_radius=10,
                 width=28,
                 height=28,
                 alignment=ft.Alignment.CENTER,
@@ -229,7 +253,7 @@ class CalendarGrid(ft.Column):
             day_label = ft.Text(
                 str(d.day),
                 size=13,
-                weight=ft.FontWeight.W_500 if in_month else ft.FontWeight.W_400,
+                weight=ft.FontWeight.W_600 if in_month else ft.FontWeight.W_400,
                 color=num_color,
             )
 
@@ -261,14 +285,16 @@ class CalendarGrid(ft.Column):
                                 ft.Text(
                                     value=title,
                                     size=12,
+                                    color=ft.Colors.GREY_800,
                                     overflow=ft.TextOverflow.ELLIPSIS,
                                 ),
                             ],
-                            spacing=5,
+                            spacing=4,
+                            tight=True,
                         ),
-                        border_radius=4,
+                        border_radius=6,
                         bgcolor=to_ahex(adjust_lightness(to_hexa(color), 0.3)),
-                        padding=ft.Padding.symmetric(vertical=2, horizontal=5),
+                        padding=ft.Padding.symmetric(vertical=2, horizontal=6),
                         on_click=go_to_event_details(event_id=e_id),
                         on_hover=handle_badge_hover,
                     )
@@ -276,14 +302,11 @@ class CalendarGrid(ft.Column):
 
             if len(e_titles) > 2:
                 badges.append(
-                    ft.Row(
-                        controls=[
-                            ft.Text(
-                                f"+{len(e_titles) - 2}",
-                                size=11,
-                                color=ft.Colors.ON_SURFACE_VARIANT,
-                            )
-                        ]
+                    ft.Text(
+                        f"+{len(e_titles) - 2}",
+                        size=11,
+                        color=ft.Colors.GREY_500,
+                        weight=ft.FontWeight.W_600,
                     )
                 )
 
@@ -294,13 +317,13 @@ class CalendarGrid(ft.Column):
             tight=True,
         )
 
-        bgcolor = ft.Colors.SURFACE if in_month else ft.Colors.SURFACE_CONTAINER_HIGHEST
+        bgcolor = ft.Colors.WHITE if in_month else ft.Colors.GREY_50
 
         return ft.Container(
             content=cell_content,
             expand=True,
             padding=ft.Padding.all(8),
             bgcolor=bgcolor,
-            border=ft.Border.only(right=ft.BorderSide(1, ft.Colors.OUTLINE_VARIANT)),
+            border=ft.Border.only(right=ft.BorderSide(1, ft.Colors.GREY_100)),
             alignment=ft.Alignment.TOP_LEFT,
         )

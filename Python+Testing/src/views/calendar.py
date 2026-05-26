@@ -11,10 +11,35 @@ class CalendarView(BaseView):
 
         grid = self.build_grid()
 
+        card = ft.Container(
+            content=grid,
+            width=960,
+            padding=ft.Padding.symmetric(horizontal=20, vertical=16),
+            border_radius=20,
+            bgcolor=ft.Colors.WHITE,
+            shadow=ft.BoxShadow(
+                spread_radius=2,
+                blur_radius=20,
+                color=ft.Colors.with_opacity(0.12, "#000000"),
+                offset=ft.Offset(0, 6),
+            ),
+        )
+
         super().__init__(
             route="/calendar",
-            body=[grid],
-            body_kwargs={"spacing": 0},
+            body=[
+                ft.Container(
+                    content=card,
+                    alignment=ft.Alignment(0, 0),
+                    expand=True,
+                ),
+            ],
+            body_kwargs={"horizontal_alignment": ft.CrossAxisAlignment.CENTER},
+            gradient=ft.LinearGradient(
+                begin=ft.Alignment(0, -1),
+                end=ft.Alignment(0, 1),
+                colors=["#EEF2FF", "#E0E7FF", "#C7D2FE"],
+            ),
         )
 
     def build_grid(self) -> ft.Control:
