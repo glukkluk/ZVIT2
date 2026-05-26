@@ -14,12 +14,6 @@ class MainAppBar(ft.AppBar):
             bgcolor=ft.Colors.WHITE,
             actions=[
                 ft.IconButton(
-                    icon=ft.Icons.DARK_MODE,
-                    icon_color=ft.Colors.BLACK_87,
-                    highlight_color=ft.Colors.INDIGO_50,
-                    on_click=self.change_theme_mode,
-                ),
-                ft.IconButton(
                     icon=ft.Icons.ACCOUNT_CIRCLE_OUTLINED,
                     icon_color=ft.Colors.BLACK_87,
                     highlight_color=ft.Colors.INDIGO_50,
@@ -27,14 +21,6 @@ class MainAppBar(ft.AppBar):
                 ),
             ],
         )
-
-    def change_theme_mode(self, e: ft.Event[ft.IconButton]):
-        if self.page.theme_mode == ft.ThemeMode.LIGHT:
-            self.page.theme_mode = ft.ThemeMode.DARK
-            e.control.icon = ft.Icons.LIGHT_MODE
-        else:
-            self.page.theme_mode = ft.ThemeMode.LIGHT
-            e.control.icon = ft.Icons.DARK_MODE
 
     async def open_account_actions(self):
         await self.page.push_route("/profile")

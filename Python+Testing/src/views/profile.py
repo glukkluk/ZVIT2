@@ -502,5 +502,4 @@ class ProfileView(BaseView):
 
     async def logout(self, e=None):
         self.page.session.store.clear()
-        self.page.theme_mode = ft.ThemeMode.LIGHT
         await self.page.push_route("/login")
