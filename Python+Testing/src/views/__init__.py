@@ -6,7 +6,7 @@ from .register import RegisterView
 from .new import NewEventView
 from .profile import ProfileView
 from .calendar import CalendarView
-from .reminder import ReminderView
+from .reminders import RemindersView
 from .notifications import NotificationsView
 
 __all__ = [
@@ -18,6 +18,6 @@ __all__ = [
     "NewEventView",
     "ProfileView",
     "CalendarView",
-    "ReminderView",
+    "RemindersView",
     "NotificationsView",
 ]

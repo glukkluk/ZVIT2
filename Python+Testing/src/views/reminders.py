@@ -164,13 +164,13 @@ def reminder_card(ev, on_click) -> ft.Control:
     return content
 
 
-class ReminderView(BaseView):
+class RemindersView(BaseView):
     def __init__(self, data=None):
         self.RAIL.selected_index = 2
         self._user_id = data.get("user")["id"] if data and data.get("user") else None
 
         super().__init__(
-            route="/reminder",
+            route="/reminders",
             body=self.build_controls(),
             body_kwargs={
                 "scroll": ft.ScrollMode.AUTO,

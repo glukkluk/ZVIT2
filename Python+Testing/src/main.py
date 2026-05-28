@@ -12,7 +12,7 @@ from views import (
     ProfileView,
     CalendarView,
     NotificationsView,
-    ReminderView,
+    RemindersView,
     EventDetailView,
     EditEventView,
 )
@@ -58,8 +58,8 @@ async def main(page: ft.Page):
                 case "/notifications":
                     page.views.append(NotificationsView(data=page.session.store))
 
-                case "/reminder":
-                    page.views.append(ReminderView(data=page.session.store))
+                case "/reminders":
+                    page.views.append(RemindersView(data=page.session.store))
 
                 case _:
                     event_id = int(page.route.split("/")[-1])

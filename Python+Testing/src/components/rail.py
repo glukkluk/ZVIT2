@@ -69,6 +69,6 @@ class MainRail(ft.NavigationRail):
             case 1:
                 await self.page.push_route("/calendar")
             case 2:
-                await self.page.push_route("/reminder")
+                await self.page.push_route("/reminders")
             case 3:
                 await self.page.push_route("/notifications")

@@ -7,7 +7,7 @@ import flet as ft
 from crud import read_events_by_user, has_fired, mark_fired
 from components import ReminderAlert
 from db import Session
-from views.reminder import REMINDER_MAP
+from views.reminders import REMINDER_MAP
 from views.notifications import push_notification, NotificationTypes
 
 
