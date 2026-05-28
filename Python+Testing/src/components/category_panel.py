@@ -1,6 +1,6 @@
 import flet as ft
 
-from .alerts import NewCategoryAlert
+from .alerts import CategoryAlert
 from crud import (
     create_category,
     read_categories_by_user,
@@ -153,7 +153,7 @@ class CategoryPanel(ft.Column):
                     )
             self.refresh_list()
 
-        self.page.show_dialog(NewCategoryAlert(func_on_dismiss=on_save))
+        self.page.show_dialog(CategoryAlert(func_on_dismiss=on_save))
 
     def open_edit_dialog(self, cat):
         def on_save(name: str, color: str, key: str):
@@ -176,7 +176,7 @@ class CategoryPanel(ft.Column):
             self.refresh_list()
 
         self.page.show_dialog(
-            NewCategoryAlert(
+            CategoryAlert(
                 func_on_dismiss=on_save,
                 initial_name=cat.name,
                 initial_color=to_ahex(cat.color),

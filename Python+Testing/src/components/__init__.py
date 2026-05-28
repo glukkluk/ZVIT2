@@ -8,7 +8,7 @@ from .notification import (
     AccountAlreadyExists,
 )
 from .appbar import MainAppBar
-from .alerts import NewCategoryAlert, ReminderAlert, ConfirmDeleteAccountAlert
+from .alerts import CategoryAlert, ReminderAlert, ConfirmDeleteAccountAlert
 from .rail import MainRail
 from .cards import EventCard, DetailsCard, NotificationCard
 
@@ -24,7 +24,7 @@ __all__ = [
     "AccountAlreadyExists",
     "MainAppBar",
     "MainRail",
-    "NewCategoryAlert",
+    "CategoryAlert",
     "ReminderAlert",
     "ConfirmDeleteAccountAlert",
     "EventCard",

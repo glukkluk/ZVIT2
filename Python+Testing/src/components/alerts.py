@@ -7,7 +7,7 @@ from crud import read_user_by_id, delete_user
 from core.security import verify_password
 
 
-class NewCategoryAlert(ft.AlertDialog):
+class CategoryAlert(ft.AlertDialog):
     def __init__(
         self, func_on_dismiss, initial_name: str = "", initial_color: str = "#808080"
     ):
