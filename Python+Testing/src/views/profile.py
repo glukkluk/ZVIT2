@@ -2,8 +2,8 @@ import flet as ft
 
 from components import BaseView, ConfirmDeleteAccountAlert
 from core.security import get_password_hash, verify_password
+from core.validate import check_email, check_password
 from crud import read_user_by_id, update_user
-from logic import check_email, check_password
 from db import Session
 from .notifications import push_notification, NotificationTypes
 
