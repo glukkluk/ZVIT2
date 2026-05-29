@@ -53,7 +53,7 @@ class NewEventView(BaseView):
 
         self.event_name = ft.TextField(
             hint_text="Наприклад: зустріч із клієнтом",
-            prefix_icon=ft.Icons.EVENT_OUTLINED,
+            prefix_icon=ft.Icons.TITLE_OUTLINED,
             border=ft.InputBorder.OUTLINE,
             filled=True,
             fill_color=ft.Colors.WHITE,
@@ -312,7 +312,7 @@ class NewEventView(BaseView):
             body=[
                 ft.Container(
                     content=card,
-                    alignment=ft.Alignment(0, 0),
+                    alignment=ft.Alignment.CENTER,
                     expand=True,
                 ),
             ],

@@ -369,7 +369,7 @@ class ProfileView(BaseView):
         return [
             ft.Container(
                 content=card,
-                alignment=ft.Alignment(0, 0),
+                alignment=ft.Alignment.CENTER,
                 expand=True,
             ),
         ]

@@ -250,7 +250,7 @@ class RemindersView(BaseView):
         return [
             ft.Container(
                 content=card,
-                alignment=ft.Alignment(0, 0),
+                alignment=ft.Alignment.CENTER,
                 expand=True,
             ),
         ]
@@ -334,6 +334,6 @@ class RemindersView(BaseView):
 
         return ft.Container(
             content=card,
-            alignment=ft.Alignment(0, 0),
+            alignment=ft.Alignment.CENTER,
             expand=True,
         )

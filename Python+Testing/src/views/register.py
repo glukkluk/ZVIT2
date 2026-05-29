@@ -142,7 +142,7 @@ class RegisterView(ft.View):
                 ft.Container(
                     content=card,
                     expand=True,
-                    alignment=ft.Alignment(0, 0),
+                    alignment=ft.Alignment.CENTER,
                     gradient=ft.LinearGradient(
                         begin=ft.Alignment(0, -1),
                         end=ft.Alignment(0, 1),
