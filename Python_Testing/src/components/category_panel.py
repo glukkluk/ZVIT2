@@ -133,7 +133,7 @@ class CategoryPanel(ft.Column):
 
     def open_add_dialog(self, e=None):
         def on_save(name: str, color: str, key: str):
-            from views.notifications import push_notification, NotificationTypes
+            from src.views.notifications import push_notification, NotificationTypes
 
             color_argb = to_hexa(color)
             with Session() as db:
@@ -157,7 +157,7 @@ class CategoryPanel(ft.Column):
 
     def open_edit_dialog(self, cat):
         def on_save(name: str, color: str, key: str):
-            from views.notifications import push_notification, NotificationTypes
+            from src.views.notifications import push_notification, NotificationTypes
 
             color_argb = to_hexa(color)
             with Session() as db:
@@ -188,7 +188,7 @@ class CategoryPanel(ft.Column):
             self.page.pop_dialog()
 
         def do_delete(e):
-            from views.notifications import push_notification, NotificationTypes
+            from src.views.notifications import push_notification, NotificationTypes
 
             cat_name = cat.name
             with Session() as db:
