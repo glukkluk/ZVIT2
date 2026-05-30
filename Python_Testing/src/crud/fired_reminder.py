@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from models import FiredReminder
+from src.models import FiredReminder
 
 
 def get_fired(db: Session, user_id: int, event_id: int) -> FiredReminder | None:

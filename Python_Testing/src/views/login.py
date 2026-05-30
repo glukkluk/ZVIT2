@@ -1,8 +1,8 @@
 import flet as ft
 
-from core.security import check_and_rehash, verify_password
-from crud import read_user_by_email, update_user
-from db import Session
+from src.core.security import check_and_rehash, verify_password
+from src.crud import read_user_by_email, update_user
+from src.db import Session
 
 
 class LoginView(ft.View):

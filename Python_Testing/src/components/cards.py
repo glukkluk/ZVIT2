@@ -2,9 +2,9 @@ from datetime import datetime
 
 import flet as ft
 
-from models import Event
+from src.models import Event
 
-from utils import adjust_lightness, to_ahex
+from src.utils import adjust_lightness, to_ahex
 
 
 class EventCard(ft.Container):

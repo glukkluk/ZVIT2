@@ -4,11 +4,11 @@ from zoneinfo import ZoneInfo
 
 import flet as ft
 
-from crud import read_events_by_user, has_fired, mark_fired
-from components import ReminderAlert
-from db import Session
-from views.reminders import REMINDER_MAP
-from views.notifications import push_notification, NotificationTypes
+from src.crud import read_events_by_user, has_fired, mark_fired
+from src.components import ReminderAlert
+from src.db import Session
+from src.views.reminders import REMINDER_MAP
+from src.views.notifications import push_notification, NotificationTypes
 
 
 TIMEZONE = ZoneInfo("Europe/Kiev")

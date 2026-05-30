@@ -1,10 +1,9 @@
 import flet as ft
 
-from components import AlreadyAuthNotification, NotAuthNotification
-from core.reminder_scheduler import start_scheduler
-from db import init_database
-
-from views import (
+from src.components import AlreadyAuthNotification, NotAuthNotification
+from src.core.reminder_scheduler import start_scheduler
+from src.db import init_database
+from src.views import (
     HomeView,
     LoginView,
     RegisterView,
@@ -102,4 +101,4 @@ async def main(page: ft.Page):
     await route_change()
 
 
-ft.run(main, view=ft.AppView.WEB_BROWSER)
+app = ft.run(main, view=ft.AppView.WEB_BROWSER, export_asgi_app=True)

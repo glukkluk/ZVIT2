@@ -3,7 +3,7 @@ from datetime import date
 
 import flet as ft
 
-from utils import adjust_lightness, to_ahex, to_hexa
+from src.utils import adjust_lightness, to_ahex, to_hexa
 
 WEEKDAY_LABELS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"]
 

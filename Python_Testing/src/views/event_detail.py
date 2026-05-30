@@ -1,9 +1,9 @@
 import flet as ft
 
-from components import BaseView
-from crud import read_event_by_id, delete_event
-from db import Session
-from utils import to_ahex, adjust_lightness
+from src.components import BaseView
+from src.crud import read_event_by_id, delete_event
+from src.db import Session
+from src.utils import to_ahex, adjust_lightness
 from .notifications import push_notification, NotificationTypes
 
 

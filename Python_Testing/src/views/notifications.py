@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 
 import flet as ft
 
-from components import BaseView, NotificationCard
+from src.components import BaseView, NotificationCard
 
 
 TIMEZONE = ZoneInfo("Europe/Kiev")

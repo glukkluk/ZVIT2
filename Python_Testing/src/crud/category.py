@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from models import Category
+from src.models import Category
 
 
 def create_category(

@@ -3,10 +3,10 @@ from zoneinfo import ZoneInfo
 
 import flet as ft
 
-from components import BaseView
-from crud import read_events_by_user
-from db import Session
-from utils import to_ahex, adjust_lightness
+from src.components import BaseView
+from src.crud import read_events_by_user
+from src.db import Session
+from src.utils import to_ahex, adjust_lightness
 
 TIMEZONE = ZoneInfo("Europe/Kiev")
 

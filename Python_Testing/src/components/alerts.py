@@ -2,9 +2,9 @@ import flet as ft
 from flet_color_pickers import ColorPicker
 import cyrtranslit
 
-from db import Session
-from crud import read_user_by_id, delete_user
-from core.security import verify_password
+from src.db import Session
+from src.crud import read_user_by_id, delete_user
+from src.core.security import verify_password
 
 
 class CategoryAlert(ft.AlertDialog):

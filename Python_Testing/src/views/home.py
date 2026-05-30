@@ -3,9 +3,9 @@ from zoneinfo import ZoneInfo
 
 import flet as ft
 
-from components import BaseView, EventCard, CategoryPanel
-from crud import read_events_by_user
-from db import Session
+from src.components import BaseView, EventCard, CategoryPanel
+from src.crud import read_events_by_user
+from src.db import Session
 
 
 TIMEZONE = ZoneInfo("Europe/Kiev")

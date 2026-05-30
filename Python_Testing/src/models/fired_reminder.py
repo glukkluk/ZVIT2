@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import mapped_column, Mapped
 
-from db import Base
+from src.db import Base
 
 
 class FiredReminder(Base):

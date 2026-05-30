@@ -1,10 +1,10 @@
 import flet as ft
 
-from crud import read_user_by_email, create_user
-from core.security import get_password_hash
-from core.validate import check_email, check_password
-from db import Session
-from components import AccountAlreadyExists
+from src.crud import read_user_by_email, create_user
+from src.core.security import get_password_hash
+from src.core.validate import check_email, check_password
+from src.db import Session
+from src.components import AccountAlreadyExists
 
 
 class RegisterView(ft.View):

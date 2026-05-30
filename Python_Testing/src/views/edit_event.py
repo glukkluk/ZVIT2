@@ -2,16 +2,16 @@ from zoneinfo import ZoneInfo
 
 import flet as ft
 
-from components import BaseView
-from crud import (
+from src.components import BaseView
+from src.crud import (
     update_event,
     read_categories_by_user,
     read_category_by_key,
     read_event_by_id,
     unmark_fired,
 )
-from db import Session
-from utils import to_ahex
+from src.db import Session
+from src.utils import to_ahex
 from .notifications import push_notification, NotificationTypes
 
 

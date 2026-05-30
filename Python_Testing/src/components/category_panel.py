@@ -1,15 +1,15 @@
 import flet as ft
 
 from .alerts import CategoryAlert
-from crud import (
+from src.crud import (
     create_category,
     read_categories_by_user,
     read_category_by_key,
     update_category,
     delete_category,
 )
-from db import Session
-from utils import to_ahex, to_hexa, adjust_lightness
+from src.db import Session
+from src.utils import to_ahex, to_hexa, adjust_lightness
 
 
 class CategoryPanel(ft.Column):

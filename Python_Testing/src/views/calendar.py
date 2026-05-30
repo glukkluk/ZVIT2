@@ -1,8 +1,8 @@
 import flet as ft
 
-from components import BaseView, CalendarGrid
-from crud import read_events_by_user
-from db import Session
+from src.components import BaseView, CalendarGrid
+from src.crud import read_events_by_user
+from src.db import Session
 
 
 class CalendarView(BaseView):

@@ -3,7 +3,7 @@ from datetime import date, time
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
-from models import Event
+from src.models import Event
 
 
 def create_event(
