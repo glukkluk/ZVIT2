@@ -33,7 +33,7 @@ class NewEventView(BaseView):
 
         self.RAIL.selected_index = None
 
-        self.user_id = data.get("user")["id"]
+        self.user_id = data.get("user")["id"] if data and data.get("user") else None
 
         db_categories: list[dict] = []
         if self.user_id:

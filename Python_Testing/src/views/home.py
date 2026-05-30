@@ -30,7 +30,7 @@ def card_wrapper(content: ft.Control, expand: bool | int | None = None) -> ft.Co
 class HomeView(BaseView):
     def __init__(self, data):
         self.db_session = Session
-        self.user_id = data.get("user")["id"] if data.get("user") else None
+        self.user_id = data.get("user")["id"] if data and data.get("user") else None
 
         events_col = ft.Column(
             controls=self.build_events(),

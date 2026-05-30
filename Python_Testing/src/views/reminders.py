@@ -167,7 +167,7 @@ def reminder_card(ev, on_click) -> ft.Control:
 class RemindersView(BaseView):
     def __init__(self, data=None):
         self.RAIL.selected_index = 2
-        self._user_id = data.get("user")["id"] if data and data.get("user") else None
+        self.user_id = data.get("user")["id"] if data and data.get("user") else None
 
         super().__init__(
             route="/reminders",
@@ -184,11 +184,11 @@ class RemindersView(BaseView):
         )
 
     def build_controls(self) -> list[ft.Control]:
-        if not self._user_id:
+        if not self.user_id:
             return [ft.Text("Не вдалося завантажити нагадування.")]
 
         with Session() as db:
-            all_events = read_events_by_user(db=db, user_id=self._user_id)
+            all_events = read_events_by_user(db=db, user_id=self.user_id)
 
         events = [e for e in all_events if e.reminder_time != "no"]
 

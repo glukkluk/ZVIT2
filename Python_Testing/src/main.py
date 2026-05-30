@@ -36,19 +36,32 @@ async def main(page: ft.Page):
         first_entry = page.session.store.get(key="first_entry")
 
         if is_authorized:
-            current_user_id = page.session.store.get("user")["id"]
+            user_data = page.session.store.get("user")
+            if user_data and isinstance(user_data, dict) and "id" in user_data:
+                current_user_id = user_data["id"]
 
-            if not getattr(page, "scheduler_task", None) or page.scheduler_task.done():
-                user = page.session.store.get("user")
-                if user:
-                    page.scheduler_task = start_scheduler(page, user["id"])
+                if (
+                    not getattr(page, "scheduler_task", None)
+                    or page.scheduler_task.done()
+                ):
+                    if user_data:
+                        page.scheduler_task = start_scheduler(page, user_data["id"])
+            else:
+                is_authorized = False
+                await page.push_route("/login")
+                page.update()
+                return
 
             match page.route:
                 case "/":
                     page.views.append(HomeView(data=page.session.store))
                     logger.info(
                         "Home view loaded for user id={}",
-                        page.session.store.get("user")["id"],
+                        user_data["id"]
+                        if user_data
+                        and isinstance(user_data, dict)
+                        and "id" in user_data
+                        else "unknown",
                     )
 
                 case "/login" | "/register":
