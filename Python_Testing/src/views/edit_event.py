@@ -395,8 +395,8 @@ class EditEventView(BaseView):
         self.reminder_time = e.data
 
     def clear_error(self, e: ft.Event):
-        if e.control.error_text:
-            e.control.error_text = ""
+        if e.control.error:
+            e.control.error = None
             self.page.update()
 
     def validate(self) -> bool:
@@ -404,10 +404,10 @@ class EditEventView(BaseView):
 
         name = (self.event_name.value or "").strip()
         if not name:
-            self.event_name.error_text = "Введіть назву події"
+            self.event_name.error = "Введіть назву події"
             has_error = True
         else:
-            self.event_name.error_text = ""
+            self.event_name.error = None
 
         if not self.date or not self.time:
             self.datetime_error.value = DATETIME_ERROR_MESSAGES[0]
@@ -418,10 +418,10 @@ class EditEventView(BaseView):
 
         location = (self.location_input.value or "").strip()
         if not location:
-            self.location_input.error_text = "Введіть місце проведення"
+            self.location_input.error = "Введіть місце проведення"
             has_error = True
         else:
-            self.location_input.error_text = ""
+            self.location_input.error = None
 
         if not self.user_id:
             has_error = True

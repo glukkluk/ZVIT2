@@ -392,8 +392,8 @@ class ProfileView(BaseView):
         self.page.update()
 
     def clear_field_error(self, e):
-        if e.control.error_text:
-            e.control.error_text = ""
+        if e.control.error:
+            e.control.error = ""
             self.page.update()
 
     def set_error(self, msg: str):
@@ -414,30 +414,30 @@ class ProfileView(BaseView):
         has_error = False
 
         if not check_email(new_email):
-            self.new_email.error_text = "Некоректний e-mail"
+            self.new_email.error = "Некоректний e-mail"
             has_error = True
         else:
-            self.new_email.error_text = ""
+            self.new_email.error = None
 
         if not current_pw:
-            self.current_password.error_text = "Введіть поточний пароль"
+            self.current_password.error = "Введіть поточний пароль"
             has_error = True
         else:
-            self.current_password.error_text = ""
+            self.current_password.error = None
 
         if any([new_pw, confirm_pw]):
             pw_error = check_password(new_pw)
             if pw_error:
-                self.new_password.error_text = pw_error
+                self.new_password.error = pw_error
                 has_error = True
             else:
-                self.new_password.error_text = ""
+                self.new_password.error = None
 
             if new_pw != confirm_pw:
-                self.confirm_password.error_text = "Паролі не збігаються"
+                self.confirm_password.error = "Паролі не збігаються"
                 has_error = True
             else:
-                self.confirm_password.error_text = ""
+                self.confirm_password.error = None
 
         if has_error:
             self.page.update()
@@ -449,7 +449,7 @@ class ProfileView(BaseView):
                 self.set_error("Користувача не знайдено.")
                 return
             if not verify_password(user.password_hash, current_pw):
-                self.current_password.error_text = "Невірний пароль"
+                self.current_password.error = "Невірний пароль"
                 self.page.update()
                 return
 
