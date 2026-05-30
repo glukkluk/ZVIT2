@@ -1,3 +1,5 @@
+from loguru import logger
+
 import flet as ft
 
 from src.components import BaseView, ConfirmDeleteAccountAlert
@@ -502,4 +504,6 @@ class ProfileView(BaseView):
 
     async def logout(self, e=None):
         self.page.session.store.clear()
+
+        logger.info("User logged out: id={}", self.user_id)
         await self.page.push_route("/login")

@@ -1,3 +1,5 @@
+from loguru import logger
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -22,6 +24,7 @@ def create_category(
     db.commit()
     db.refresh(category)
 
+    logger.info("Category created: id={}, name='{}'", category.id, name)
     return category
 
 
@@ -29,13 +32,18 @@ def read_categories_by_user(db: Session, user_id: int) -> list[Category]:
     stmt = select(Category).filter_by(user_id=user_id)
     result = db.execute(stmt)
 
-    return list(result.scalars().all())
+    categories = list(result.scalars().all())
+    logger.info(
+        "Read categories for user_id={}: found {} categories", user_id, len(categories)
+    )
+    return categories
 
 
 def read_category_by_key(db: Session, key: str, user_id: int) -> Category | None:
     stmt = select(Category).filter_by(key=key, user_id=user_id)
     result = db.execute(stmt)
 
+    logger.info("Read category by key='{}' for user_id={}", key, user_id)
     return result.scalar_one_or_none()
 
 
@@ -57,6 +65,7 @@ def update_category(
     db.commit()
     db.refresh(category)
 
+    logger.info("Category updated: id={}, name='{}'", category_id, name)
     return category
 
 
@@ -66,3 +75,5 @@ def delete_category(db: Session, category_id: int) -> None:
     if category:
         db.delete(category)
         db.commit()
+
+        logger.info("Category deleted: id={}, name='{}'", category_id, category.name)

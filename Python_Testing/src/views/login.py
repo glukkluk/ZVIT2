@@ -1,4 +1,5 @@
 import flet as ft
+from loguru import logger
 
 from src.core.security import check_and_rehash, verify_password
 from src.crud import read_user_by_email, update_user
@@ -203,6 +204,8 @@ class LoginView(ft.View):
                 "password_hash": user.password_hash,
             },
         )
+
+        logger.info("User logged in: id={}, email={}", user.id, user.email)
         await self.page.push_route("/")
 
     async def go_to_register(self):

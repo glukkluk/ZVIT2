@@ -1,5 +1,7 @@
 from datetime import date, time
 
+from loguru import logger
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
@@ -32,6 +34,7 @@ def create_event(
     db.commit()
     db.refresh(event)
 
+    logger.info("Event created: id={}, name='{}'", event.id, name)
     return event
 
 
@@ -43,10 +46,14 @@ def read_events_by_user(db: Session, user_id: int) -> list[Event]:
         .order_by(Event.event_date, Event.event_time)
     )
     result = db.execute(stmt)
-    return list(result.scalars().all())
+
+    events = list(result.scalars().all())
+    logger.info("Read events for user_id={}: found {} events", user_id, len(events))
+    return events
 
 
 def read_event_by_id(db: Session, event_id: int) -> Event | None:
+    logger.info("Read event by ID: {}", event_id)
     return db.get(Event, event_id)
 
 
@@ -55,6 +62,8 @@ def delete_event(db: Session, event_id: int) -> None:
     if event:
         db.delete(event)
         db.commit()
+
+        logger.info("Event deleted: id={}, name='{}'", event_id, event.name)
 
 
 def update_event(
@@ -78,6 +87,9 @@ def update_event(
     event.reminder_time = reminder_time
     event.description = description
     event.category_id = category_id
+
     db.commit()
     db.refresh(event)
+
+    logger.info("Event updated: id={}, name='{}'", event_id, name)
     return event

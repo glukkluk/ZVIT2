@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from src.models import FiredReminder
+from loguru import logger
+
+from src.models import FiredReminder, Event
 
 
 def get_fired(db: Session, user_id: int, event_id: int) -> FiredReminder | None:
@@ -17,12 +19,22 @@ def has_fired(db: Session, user_id: int, event_id: int) -> bool:
 
 def mark_fired(db: Session, user_id: int, event_id: int) -> None:
     if not has_fired(db, user_id, event_id):
+        event = db.get(Event, event_id)
+
         db.add(FiredReminder(user_id=user_id, event_id=event_id))
         db.commit()
+
+        logger.info("Reminder fired for event '{}' (id={})", event.name, event_id)
 
 
 def unmark_fired(db: Session, user_id: int, event_id: int) -> None:
     if has_fired(db=db, user_id=user_id, event_id=event_id):
+        event = db.get(Event, event_id)
+
         fired_instance = get_fired(db=db, user_id=user_id, event_id=event_id)
         db.delete(fired_instance)
         db.commit()
+
+        logger.info(
+            "Reminder unmarked as fired for event '{}' (id={})", event.name, event_id
+        )

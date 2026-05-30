@@ -1,3 +1,5 @@
+from loguru import logger
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -11,10 +13,12 @@ def create_user(db: Session, email: str, password_hash: str) -> User:
     db.commit()
     db.refresh(user)
 
+    logger.info("User created: id={}, email={}", user.id, email)
     return user
 
 
 def read_user_by_id(db: Session, user_id: int) -> User | None:
+    logger.info("Read user by ID: {}", user_id)
     return db.get(User, user_id)
 
 
@@ -23,6 +27,7 @@ def read_user_by_email(db: Session, email: str) -> User | None:
 
     result = db.execute(statement=stmt)
 
+    logger.info("Read user by email: {}", email)
     return result.scalar_one_or_none()
 
 
@@ -40,6 +45,7 @@ def update_user(db: Session, user_id, **kwargs) -> User | None:
     db.commit()
     db.refresh(user)
 
+    logger.info("User updated: id={}, fields={}", user_id, list(kwargs.keys()))
     return user
 
 
@@ -48,5 +54,6 @@ def delete_user(db: Session, user_id: int) -> None:
 
     if user:
         db.delete(user)
-
         db.commit()
+
+        logger.info("User deleted: id={}, email={}", user_id, user.email)
