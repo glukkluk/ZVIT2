@@ -226,12 +226,8 @@ aside {
     flex-shrink: 0;
 }
 .logo__icon {
-    width: 32px;
-    height: 32px;
     border-radius: var(--sp-1);
     background: var(--accent);
-    display: grid;
-    place-items: center;
     color: #fff;
 }
 
@@ -364,6 +360,7 @@ svg.lucide {
     padding: var(--sp-1);
 }
 .hamburger:hover {
+    color: var(--accent);
     border-color: var(--accent);
 }
 .hamburger:focus {
