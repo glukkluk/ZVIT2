@@ -715,7 +715,8 @@ svg.lucide {
 .logos__label {
     text-align: center;
     font-size: 0.75rem;
-    color: var(--text-faint);
+    /* color: var(--text-faint); */
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: var(--sp-3);
@@ -731,11 +732,13 @@ svg.lucide {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1rem;
-    color: var(--text-faint);
+    /* color: var(--text-faint); */
+    color: var(--text-muted);
     transition: color var(--transition);
 }
 .logos__row span:hover {
-    color: var(--text-muted);
+    /* color: var(--text-muted); */
+    color: var(--text);
 }
 
 .features {
