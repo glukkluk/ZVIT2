@@ -19,7 +19,7 @@
         <header class="header" id="header">
             <div class="container">
                 <div class="header__inner">
-                    <a href="#" class="logo" aria-label="FlowDesk — головна">
+                    <a href="#" class="logo">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="32"
@@ -67,7 +67,7 @@
                         FlowDesk
                     </a>
 
-                    <nav class="header__nav" aria-label="Головна навігація">
+                    <nav class="header__nav">
                         <ul role="list">
                             <li>
                                 <a href="#features" class="nav-link"
@@ -93,11 +93,7 @@
                         >
                             Почати безкоштовно
                         </button>
-                        <button
-                            class="theme-btn action-btn"
-                            id="themeToggle"
-                            aria-label="Змінити тему"
-                        >
+                        <button class="theme-btn action-btn" id="themeToggle">
                             <i
                                 data-lucide="moon"
                                 class="icon-moon"
@@ -111,11 +107,7 @@
                                 height="18"
                             ></i>
                         </button>
-                        <button
-                            class="hamburger action-btn"
-                            id="hamburger"
-                            aria-label="Відкрити меню"
-                        >
+                        <button class="hamburger action-btn" id="hamburger">
                             <i data-lucide="menu" width="18" height="18"></i>
                         </button>
                     </div>
@@ -124,21 +116,11 @@
         </header>
 
         <div class="nav-overlay" id="navOverlay"></div>
-        <div
-            class="nav-drawer"
-            id="navDrawer"
-            role="dialog"
-            aria-label="Мобільне меню"
-            aria-modal="true"
-        >
-            <button
-                class="nav-drawer__close action-btn"
-                id="navClose"
-                aria-label="Закрити меню"
-            >
+        <div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true">
+            <button class="nav-drawer__close action-btn" id="navClose">
                 <i data-lucide="x" width="18" height="18"></i>
             </button>
-            <nav aria-label="Мобільна навігація">
+            <nav>
                 <ul class="nav-drawer__list" role="list">
                     <li>
                         <a href="#features" class="nav-drawer__link"
@@ -165,7 +147,7 @@
         </div>
 
         <main>
-            <section class="hero" id="hero" aria-label="Головний екран">
+            <section class="hero" id="hero">
                 <div class="hero__bg" aria-hidden="true">
                     <div class="hero__grid"></div>
                     <div class="hero__glow"></div>
@@ -311,7 +293,7 @@
                 </div>
             </section>
 
-            <aside class="logos" aria-label="Нам довіряють">
+            <aside class="logos">
                 <div class="container">
                     <p class="logos__label">Нам довіряють команди з</p>
                     <div class="logos__row">
@@ -485,19 +467,11 @@
                         <p>Справжні слова від тих, хто вже в темпі.</p>
                     </div>
 
-                    <div
-                        class="swiper reviews__swiper reveal"
-                        aria-label="Слайдер відгуків"
-                    >
+                    <div class="swiper reviews__swiper reveal">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
                                 <article class="review-card">
-                                    <div
-                                        class="review-card__stars"
-                                        aria-label="5 зірок"
-                                    >
-                                        ★★★★★
-                                    </div>
+                                    <div class="review-card__stars">★★★★★</div>
                                     <blockquote>
                                         "Скоротили час на планування спринту
                                         вдвічі. Дошка інтуїтивна — розробники
@@ -530,12 +504,7 @@
 
                             <div class="swiper-slide">
                                 <article class="review-card">
-                                    <div
-                                        class="review-card__stars"
-                                        aria-label="5 зірок"
-                                    >
-                                        ★★★★★
-                                    </div>
+                                    <div class="review-card__stars">★★★★★</div>
                                     <blockquote>
                                         "Мігрували з Jira за вихідні.
                                         Конструктор автоматизацій заощаджує 8
@@ -565,12 +534,7 @@
 
                             <div class="swiper-slide">
                                 <article class="review-card">
-                                    <div
-                                        class="review-card__stars"
-                                        aria-label="5 зірок"
-                                    >
-                                        ★★★★★
-                                    </div>
+                                    <div class="review-card__stars">★★★★★</div>
                                     <blockquote>
                                         "Аналітика показала вузькі місця. Ми
                                         реструктурували команду за два тижні —
@@ -602,12 +566,7 @@
 
                             <div class="swiper-slide">
                                 <article class="review-card">
-                                    <div
-                                        class="review-card__stars"
-                                        aria-label="5 зірок"
-                                    >
-                                        ★★★★★
-                                    </div>
+                                    <div class="review-card__stars">★★★★★</div>
                                     <blockquote>
                                         "Управляю командою з 40 людей у 4
                                         часових поясах. FlowDesk — єдине джерело
@@ -651,11 +610,7 @@
                         <span class="pricing__toggle-lbl" id="lbl-monthly"
                             >Щомісяця</span
                         >
-                        <label
-                            class="switch"
-                            for="billingToggle"
-                            aria-label="Перемкнути на річний тариф"
-                        >
+                        <label class="switch" for="billingToggle">
                             <input type="checkbox" id="billingToggle" />
                             <span class="switch__slider"></span>
                         </label>
@@ -757,7 +712,7 @@
                 </div>
             </section>
 
-            <section class="cta" aria-label="Заклик до дії">
+            <section class="cta">
                 <div class="container">
                     <div class="cta__box reveal">
                         <h2>Готові рухатися швидше?</h2>
@@ -784,15 +739,11 @@
             </section>
         </main>
 
-        <footer class="footer" aria-label="Підвал сайту">
+        <footer class="footer">
             <div class="container">
                 <div class="footer__grid">
                     <div class="footer__brand">
-                        <a
-                            href="#"
-                            class="logo"
-                            aria-label="FlowDesk — головна"
-                        >
+                        <a href="#" class="logo">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="32"
@@ -845,7 +796,7 @@
                         </p>
                     </div>
 
-                    <nav aria-label="Продукт">
+                    <nav>
                         <h3>Продукт</h3>
                         <ul role="list">
                             <li>
@@ -865,7 +816,7 @@
                         </ul>
                     </nav>
 
-                    <nav aria-label="Компанія">
+                    <nav>
                         <h3>Компанія</h3>
                         <ul role="list">
                             <li>
@@ -881,7 +832,7 @@
                         </ul>
                     </nav>
 
-                    <nav aria-label="Правова інформація">
+                    <nav>
                         <h3>Правове</h3>
                         <ul role="list">
                             <li>
@@ -905,7 +856,7 @@
 
                 <div class="footer__bottom">
                     <span>© 2025 FlowDesk Inc.</span>
-                    <nav aria-label="Правові посилання">
+                    <nav>
                         <a href="#" class="footer__link">Конфіденційність</a>
                         <a href="#" class="footer__link">Умови</a>
                         <a href="#" class="footer__link">Cookie</a>
@@ -929,11 +880,7 @@
                         </h2>
                         <p>Ваш workspace готовий за 30 секунд.</p>
                     </div>
-                    <button
-                        class="modal__close"
-                        id="modalClose"
-                        aria-label="Закрити"
-                    >
+                    <button class="modal__close" id="modalClose">
                         <i data-lucide="x" width="18" height="18"></i>
                     </button>
                 </div>
@@ -1018,12 +965,7 @@
             </div>
         </div>
 
-        <div
-            class="cookie-bar"
-            id="cookieBar"
-            role="region"
-            aria-label="Cookie-згода"
-        >
+        <div class="cookie-bar" id="cookieBar" role="region">
             <div class="cookie-bar__text">
                 <strong>🍪 Ми використовуємо cookies</strong> для покращення
                 досвіду та аналізу трафіку.
@@ -1039,7 +981,7 @@
             </div>
         </div>
 
-        <button class="go-top" id="goTop" aria-label="Нагору">
+        <button class="go-top" id="goTop">
             <i data-lucide="arrow-up" width="20" height="20"></i>
         </button>
 
