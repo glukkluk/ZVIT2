@@ -225,10 +225,20 @@ aside {
     color: var(--text);
     flex-shrink: 0;
 }
+.logo:hover {
+    color: var(--accent);
+}
 .logo__icon {
     border-radius: var(--sp-1);
     background: var(--accent);
     color: #fff;
+}
+.logo,
+.logo__icon {
+    transition: all var(--transition);
+}
+.logo:hover .logo__icon {
+    transform: rotate(15deg) scale(0.95);
 }
 
 .header {
@@ -715,7 +725,6 @@ svg.lucide {
 .logos__label {
     text-align: center;
     font-size: 0.75rem;
-    /* color: var(--text-faint); */
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -732,12 +741,10 @@ svg.lucide {
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1rem;
-    /* color: var(--text-faint); */
     color: var(--text-muted);
     transition: color var(--transition);
 }
 .logos__row span:hover {
-    /* color: var(--text-muted); */
     color: var(--text);
 }
 

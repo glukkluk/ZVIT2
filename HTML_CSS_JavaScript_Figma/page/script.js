@@ -197,7 +197,7 @@ const revealObserver = new IntersectionObserver(
             }
         });
     },
-    { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
+    { threshold: 0.1 },
 );
 
 revealEls.forEach((el) => revealObserver.observe(el));
@@ -211,9 +211,5 @@ new Swiper(".reviews__swiper", {
     breakpoints: {
         640: { slidesPerView: 2 },
         1024: { slidesPerView: 3 },
-    },
-    a11y: {
-        prevSlideMessage: "Попередній відгук",
-        nextSlideMessage: "Наступний відгук",
     },
 });
