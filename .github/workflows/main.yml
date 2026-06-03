@@ -1,4 +1,4 @@
-name: Deploy Landing Page
+name: Deploy to Render and GitHub Pages
 
 on:
   push:
@@ -10,18 +10,24 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "deploys"
   cancel-in-progress: false
 
 jobs:
   deploy:
     environment:
-      name: github-pages
+      name: deploy
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+
+      - name: Deploy to Render
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl "$deploy_url"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
